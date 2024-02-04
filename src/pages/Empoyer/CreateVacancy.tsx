@@ -21,6 +21,7 @@ import { useGetMyCompanyQuery } from '../../store/api/services/company.ts'
 import { useCreateVacancyMutation } from '../../store/api/services/vacancy.ts'
 import { ICategory, ICity } from '../../types/types.ts'
 import { FC, useEffect } from 'react'
+import { NavLink as RouterNavLink } from 'react-router-dom'
 
 interface IFormValues {
   company?: number
@@ -77,155 +78,166 @@ export const CreateVacancy: FC = () => {
       <Heading textAlign="center" size="md" p={5}>
         Створення вакансії
       </Heading>
-      <Box
-        as="form"
-        onSubmit={handleSubmit}
-        display="flex"
-        justifyContent="center"
-      >
-        <Stack
-          spacing={5}
-          width="70%"
-          rounded={'lg'}
-          p={5}
-          align="center"
-          boxShadow={'lg'}
-          bg={useColorModeValue('white', 'black.600')}
+      {company ? (
+        <Box
+          as="form"
+          onSubmit={handleSubmit}
+          display="flex"
+          justifyContent="center"
         >
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              Компанія
-            </FormLabel>
-            <Input type="text" value={company?.title} disabled />
-          </FormControl>
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              Назва вакансії
-            </FormLabel>
-            <Input
-              type="text"
-              name="title"
-              value={values.title}
-              onChange={handleChange}
-              placeholder="Назва вакансії"
-            />
-          </FormControl>
-          {touched.title && errors.title ? (
-            <Text color="red">{errors.title}</Text>
-          ) : null}
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              Категорія
-            </FormLabel>
-            <Select
-              name="category"
-              onChange={e => setFieldValue('category', +e.target.value)}
-              value={values.category}
-              placeholder="Оберіть категорію"
-            >
-              {categories.map((category: ICategory) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          {touched.category && errors.category ? (
-            <Text color="red">{errors.category}</Text>
-          ) : null}
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              Місто
-            </FormLabel>
-            <Select
-              name="city"
-              value={values.city}
-              onChange={e => setFieldValue('city', +e.target.value)}
-              placeholder="Оберіть місто"
-            >
-              {cities.map((city: ICity) => (
-                <option key={city.id} value={city.id}>
-                  {city.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          {touched.city && errors.city ? (
-            <Text color="red">{errors.city}</Text>
-          ) : null}
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              Заробітна плата
-            </FormLabel>
-            <Input
-              type="number"
-              name="salary"
-              value={values.salary}
-              onChange={handleChange}
-              placeholder="Заробітна плата"
-            />
-          </FormControl>
-          {touched.salary && errors.salary ? (
-            <Text color="red">{errors.salary}</Text>
-          ) : null}
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              Опис
-            </FormLabel>
-            <Textarea
-              name="description"
-              value={values.description}
-              onChange={handleChange}
-              placeholder="Опис"
-            />
-          </FormControl>
-          {touched.description && errors.description ? (
-            <Text color="red">{errors.description}</Text>
-          ) : null}
-          <Button
-            isDisabled={isLoading}
-            isLoading={isLoading}
-            loadingText="Створення"
-            w="50%"
-            maxW="xs"
-            mt={5}
-            colorScheme="purple"
-            type="submit"
+          <Stack
+            spacing={5}
+            width="70%"
+            rounded={'lg'}
+            p={5}
+            align="center"
+            boxShadow={'lg'}
+            bg={useColorModeValue('white', 'black.600')}
           >
-            Створити
+            <FormControl flexDirection="column">
+              <FormLabel
+                sx={{
+                  fontSize: '1xl',
+                  mb: 5,
+                }}
+              >
+                Компанія
+              </FormLabel>
+              <Input type="text" value={company?.title} disabled />
+            </FormControl>
+            <FormControl flexDirection="column">
+              <FormLabel
+                sx={{
+                  fontSize: '1xl',
+                  mb: 5,
+                }}
+              >
+                Назва вакансії
+              </FormLabel>
+              <Input
+                type="text"
+                name="title"
+                value={values.title}
+                onChange={handleChange}
+                placeholder="Назва вакансії"
+              />
+            </FormControl>
+            {touched.title && errors.title ? (
+              <Text color="red">{errors.title}</Text>
+            ) : null}
+            <FormControl flexDirection="column">
+              <FormLabel
+                sx={{
+                  fontSize: '1xl',
+                  mb: 5,
+                }}
+              >
+                Категорія
+              </FormLabel>
+              <Select
+                name="category"
+                onChange={e => setFieldValue('category', +e.target.value)}
+                value={values.category}
+                placeholder="Оберіть категорію"
+              >
+                {categories.map((category: ICategory) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+            {touched.category && errors.category ? (
+              <Text color="red">{errors.category}</Text>
+            ) : null}
+            <FormControl flexDirection="column">
+              <FormLabel
+                sx={{
+                  fontSize: '1xl',
+                  mb: 5,
+                }}
+              >
+                Місто
+              </FormLabel>
+              <Select
+                name="city"
+                value={values.city}
+                onChange={e => setFieldValue('city', +e.target.value)}
+                placeholder="Оберіть місто"
+              >
+                {cities.map((city: ICity) => (
+                  <option key={city.id} value={city.id}>
+                    {city.name}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
+            {touched.city && errors.city ? (
+              <Text color="red">{errors.city}</Text>
+            ) : null}
+            <FormControl flexDirection="column">
+              <FormLabel
+                sx={{
+                  fontSize: '1xl',
+                  mb: 5,
+                }}
+              >
+                Заробітна плата
+              </FormLabel>
+              <Input
+                type="number"
+                name="salary"
+                value={values.salary}
+                onChange={handleChange}
+                placeholder="Заробітна плата"
+              />
+            </FormControl>
+            {touched.salary && errors.salary ? (
+              <Text color="red">{errors.salary}</Text>
+            ) : null}
+            <FormControl flexDirection="column">
+              <FormLabel
+                sx={{
+                  fontSize: '1xl',
+                  mb: 5,
+                }}
+              >
+                Опис
+              </FormLabel>
+              <Textarea
+                name="description"
+                value={values.description}
+                onChange={handleChange}
+                placeholder="Опис"
+              />
+            </FormControl>
+            {touched.description && errors.description ? (
+              <Text color="red">{errors.description}</Text>
+            ) : null}
+            <Button
+              isDisabled={isLoading}
+              isLoading={isLoading}
+              loadingText="Створення"
+              w="50%"
+              maxW="xs"
+              mt={5}
+              colorScheme="purple"
+              type="submit"
+            >
+              Створити
+            </Button>
+          </Stack>
+        </Box>
+      ) : (
+        <Box textAlign="center">
+          <Text fontSize="xl" m={5}>
+            Додайте будь ласка компанію
+          </Text>
+          <Button colorScheme="purple" as={RouterNavLink} to="/company/create">
+            Створити компанію
           </Button>
-        </Stack>
-      </Box>
+        </Box>
+      )}
     </>
   )
 }

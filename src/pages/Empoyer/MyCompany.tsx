@@ -13,13 +13,11 @@ export const MyCompany: FC = () => {
   return (
     <Flex align="center" direction="column">
       {company ? (
-        <>
-          <Box textAlign="center">
-            <Heading>{company?.title}</Heading>
-            <Text>{company?.description}</Text>
-            <Text color="gray">{formatDate(company?.createdAt || '')}</Text>
-          </Box>
-        </>
+        <Box textAlign="center">
+          <Heading>{company?.title}</Heading>
+          <Text>{company?.description}</Text>
+          <Text color="gray">{formatDate(company?.createdAt || '')}</Text>
+        </Box>
       ) : (
         <Box textAlign="center">
           <Text fontSize="xl" m={5}>
