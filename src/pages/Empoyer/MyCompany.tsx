@@ -25,7 +25,7 @@ export const MyCompany: FC = () => {
           <Text fontSize="xl" m={5}>
             Компанія відсутня
           </Text>
-          <Button colorScheme="purple" as={RouterNavLink} to="/create-company">
+          <Button colorScheme="purple" as={RouterNavLink} to="/company/create">
             Створити компанію
           </Button>
         </Box>

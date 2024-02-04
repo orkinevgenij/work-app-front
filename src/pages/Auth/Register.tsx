@@ -85,7 +85,7 @@ export const Register: FC = () => {
             navigate('/')
           }
         } catch (error) {
-          if (error) showToast('Помилка реєстрації', 'error')
+          if (error) showToast('Данний E-mail вже існує ', 'error')
         }
       },
     })
