@@ -5,19 +5,22 @@ import {
   FormLabel,
   Heading,
   Input,
+  InputGroup,
+  InputRightElement,
   Link,
   Stack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast'
 import { useLoginMutation } from '../../store/api/services/user'
 import { auth } from '../../store/features/user/authSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -26,9 +29,10 @@ const validationSchema = Yup.object({
   password: Yup.string().required('Введіть ваш пароль'),
 })
 export const Login: FC = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false)
+
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-
   const { accessToken } = useAppSelector(state => state.auth)
   const { showToast } = useShowToast()
   const [login, { isLoading }] = useLoginMutation()
@@ -77,9 +81,9 @@ export const Login: FC = () => {
       justifyContent={'center'}
       bg={useColorModeValue('gray.50', 'black.700')}
     >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+      <Stack spacing={8} mx={'auto'} maxW={'lg'} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Логін</Heading>
+          <Heading fontSize={'2xl'}>Логін</Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -101,18 +105,30 @@ export const Login: FC = () => {
             ) : null}
             <FormControl id="password">
               <FormLabel>Пароль</FormLabel>
-              <Input
-                type="password"
-                name="password"
-                value={values.password}
-                onChange={handleChange}
-              />
+              <InputGroup>
+                <Input
+                  name="password"
+                  onChange={handleChange}
+                  value={values.password}
+                  type={showPassword ? 'text' : 'password'}
+                />
+                <InputRightElement h={'full'}>
+                  <Button
+                    variant={'ghost'}
+                    onClick={() =>
+                      setShowPassword(showPassword => !showPassword)
+                    }
+                  >
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
             </FormControl>
 
             {touched.password && errors.password ? (
               <Text color="red">{errors.password}</Text>
             ) : null}
-            <Stack spacing={10} pt={2}>
+            <Stack>
               <Button
                 type="submit"
                 isDisabled={isLoading}
@@ -127,11 +143,36 @@ export const Login: FC = () => {
               >
                 Увійти
               </Button>
+              <Text
+                m={3}
+                align="center"
+                sx={{
+                  color: 'purple.500',
+                  _hover: {
+                    textDecoration: 'underline',
+                    color: 'red',
+                  },
+                }}
+                as={RouterNavLink}
+                to="/auth/forgot-password"
+              >
+                Нагадати пароль?
+              </Text>
             </Stack>
-            <Stack pt={6}>
+            <Stack>
               <Text align={'center'}>
                 Ви ще не з нами?{' '}
-                <Link as={RouterNavLink} color="purple.500" to="/auth/register">
+                <Link
+                  as={RouterNavLink}
+                  sx={{
+                    color: 'purple.500',
+                    _hover: {
+                      textDecoration: 'underline',
+                      color: 'red',
+                    },
+                  }}
+                  to="/auth/register"
+                >
                   Зареєструйтесь
                 </Link>
               </Text>

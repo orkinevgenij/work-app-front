@@ -12,7 +12,6 @@ import {
   InputRightElement,
   Link,
   SimpleGrid,
-  Stack,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
@@ -27,10 +26,10 @@ import {
   useAverageSalaryQuery,
   useGetVacancyPaginationQuery,
 } from '../store/api/services/vacancy'
+import { filters } from '../store/features/filter/filterSlice'
+import { pagination } from '../store/features/pagination/paginationSlice'
 import { searchValue, setSearch } from '../store/features/search/searchSlice'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { pagination } from '../store/features/pagination/paginationSlice'
-import { filters } from '../store/features/filter/filterSlice'
 
 export const Home: FC = () => {
   const navigate = useNavigate()

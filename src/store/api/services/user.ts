@@ -8,13 +8,30 @@ export const userApi = api.injectEndpoints({
       providesTags: ['User'],
     }),
 
-    updateProfile: builder.mutation<Profile, Profile>({
+    updateProfile: builder.mutation<Profile, Partial<Profile>>({
       query: data => ({
         url: '/api/user/profile/edit',
         method: 'PUT',
         body: data,
       }),
       invalidatesTags: ['User'],
+    }),
+    forgotPassword: builder.mutation<Profile, { email: string }>({
+      query: email => ({
+        url: '/api/user/forgot-password',
+        method: 'POST',
+        body: email,
+      }),
+    }),
+    changePassword: builder.mutation<
+      Profile,
+      { password: string; newPassword: string }
+    >({
+      query: data => ({
+        url: '/api/user/change-password',
+        method: 'POST',
+        body: { password: data.password, newPassword: data.newPassword },
+      }),
     }),
     register: builder.mutation<IUser, UserArgs>({
       query: data => ({
@@ -37,4 +54,6 @@ export const {
   useRegisterMutation,
   useLoginMutation,
   useUpdateProfileMutation,
+  useForgotPasswordMutation,
+  useChangePasswordMutation,
 } = userApi

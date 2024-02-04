@@ -31,7 +31,7 @@ import { useRemoveVacancyMutation } from '../store/api/services/vacancy'
 import { setFilter } from '../store/features/filter/filterSlice'
 import { setTotalPage } from '../store/features/pagination/paginationSlice'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { IVacancy } from '../types/types'
+import { IResponse, IVacancy, Response } from '../types/types'
 import { Pagination } from './Pagination'
 type Sorting = {
   name: string
@@ -50,12 +50,12 @@ type Props = {
 
 export const VacanciesList: FC<Props> = ({ vacancies, city }) => {
   const { pathname } = useLocation()
-
   const dispatch = useAppDispatch()
   const { totalPages } = useAppSelector(state => state.pagination)
-  const { data: response = [] } = useMyResponseQuery(undefined, {
+  const { data: responses = [] } = useMyResponseQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
+  console.log(responses)
   const [remove] = useRemoveVacancyMutation()
 
   const handleRemove = async (id: number) => {
@@ -155,8 +155,9 @@ export const VacanciesList: FC<Props> = ({ vacancies, city }) => {
                         </Text>
                       </HStack>
                     </Tooltip>
-                    {response.find(
-                      (resp: any) => resp.vacancy?.id === vacancy?.id,
+                    {responses?.find(
+                      (response: Response) =>
+                        response.vacancy?.id === vacancy?.id,
                     ) ? (
                       <Tooltip label={`Ви вже відгукнулись`}>
                         <Box>

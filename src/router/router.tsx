@@ -35,6 +35,8 @@ import { VacancyResponse } from '../pages/Empoyer/VacancyResponse'
 import { EditProfile } from '../pages/EditProfile'
 import { Resume } from '../pages/Resume'
 import { CoverLetter } from '../pages/Empoyer/CoverLetter'
+import { ForgotPassword } from '../pages/Auth/ForgotPassword'
+import { CandidateList } from '../pages/Empoyer/CandidateList'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,8 +47,11 @@ export const router = createBrowserRouter(
       {/* Auth */}
       <Route path="auth/register" element={<Register />} />
       <Route path="auth/login" element={<Login />} />
+      <Route path="auth/forgot-password" element={<ForgotPassword />} />
       <Route path="auth/profile" element={<Profile />} />
       <Route path="auth/profile/edit" element={<EditProfile />} />
+
+      <Route path="candidates" element={<CandidateList />} />
 
       {/* Find by company,city,category */}
       <Route path="vacancy/category/:id" element={<VacancyByCategory />} />

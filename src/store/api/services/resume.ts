@@ -26,7 +26,7 @@ export const resumeApi = api.injectEndpoints({
     getOneResume: builder.query<IResume, string | undefined>({
       query: id => `/api/resume/${id}`,
     }),
-    getResume: builder.query<IResume[], undefined>({
+    getAllResume: builder.query<IResume[], undefined>({
       query: () => '/api/resume/all',
     }),
     getMyResume: builder.query<IResume, undefined>({
@@ -45,7 +45,7 @@ export const resumeApi = api.injectEndpoints({
 })
 export const {
   useCreateResumeMutation,
-  useGetResumeQuery,
+  useGetAllResumeQuery,
   useGetMyResumeQuery,
   useUpdateResumeMutation,
   useRemoveResumeMutation,

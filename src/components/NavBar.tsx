@@ -23,11 +23,10 @@ import { useSelector } from 'react-redux'
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
 import { checkAuth, logout } from '../store/features/user/authSlice'
 import { useAppDispatch } from '../store/hooks'
-import { useEffect } from 'react'
 
 const Links = [
   { label: 'Головна', path: '/' },
-  { label: 'Про нас', path: 'about' },
+  { label: 'Знайти кандидатів', path: 'candidates' },
 ]
 
 export default function NavBar() {

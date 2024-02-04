@@ -12,24 +12,69 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
 import { formatDate } from '../../helpers/date.helper'
 import { useGetMyCompanyQuery } from '../../store/api/services/company'
 
-import { useResponseQuery } from '../../store/api/services/response'
-import { IResponse } from '../../types/types'
-
+import { Pagination } from '../../components/Pagination'
+import {
+  useChangeStatusResponseMutation,
+  useResponseByCompanyQuery,
+} from '../../store/api/services/response'
+import {
+  pagination,
+  setTotalPage,
+} from '../../store/features/pagination/paginationSlice'
+import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { Response } from '../../types/types'
+enum ResponseStatus {
+  VIEWED = 'Переглянуто',
+  INTERVIEW = 'Співбесіда',
+  REFUSAL = 'Відмова',
+}
+const statusList = [
+  {
+    label: 'Переглянуто',
+    title: ResponseStatus.VIEWED,
+    color: 'messenger',
+  },
+  {
+    label: 'Співбесіда',
+    title: ResponseStatus.INTERVIEW,
+    color: 'whatsapp',
+  },
+  {
+    label: 'Відмова',
+    title: ResponseStatus.REFUSAL,
+    color: 'red',
+  },
+]
 export const VacancyResponse: FC = () => {
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
+  const { currentPage, limit, totalPages } = useAppSelector(pagination)
+
   const { data: company } = useGetMyCompanyQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
-  const { data: response = [] } = useResponseQuery(company?.id, {
-    refetchOnMountOrArgChange: true,
-    skip: company ? false : true,
-  })
+  const { data: responses } = useResponseByCompanyQuery(
+    { id: company?.id, page: currentPage, limit },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: company ? false : true,
+    },
+  )
+  const [changeStatusResponse] = useChangeStatusResponseMutation()
 
+  const handleChangeStatus = async (id: number, status: ResponseStatus) => {
+    await changeStatusResponse({ id, status })
+  }
+  useEffect(() => {
+    dispatch(setTotalPage(responses?.meta?.totalPages))
+  }, [responses])
+  if (!responses?.data?.length)
+    return <Text textAlign="center">Відгуків не знайдено &#128546; </Text>
   return (
     <Stack w="90vw" margin="0 auto">
       <Card mt={10} bg={useColorModeValue('white', 'black.600')}>
@@ -37,7 +82,7 @@ export const VacancyResponse: FC = () => {
           <Heading size="md">Відгуки</Heading>
         </CardHeader>
         <CardBody>
-          {response.map((resp: IResponse) => (
+          {responses.data?.map((resp: Response) => (
             <Stack key={resp.id}>
               <Heading fontSize="md" mb={3}>
                 Відгук на вакансію:
@@ -79,17 +124,41 @@ export const VacancyResponse: FC = () => {
                   >
                     Супровідний лист
                   </Button>
-
                   <Text color="gray" mb={3}>
                     від {formatDate(resp.createdAt)}
                   </Text>
                 </Flex>
               </CardFooter>
+              <Text
+                sx={{
+                  border: '2px solid',
+                  borderColor: 'gray.300',
+                  borderRadius: 'lg',
+                  padding: '5px',
+                }}
+                variant="outline"
+                width="fit-content"
+              >
+                {resp.status}
+              </Text>
+              <Flex gap={3}>
+                {statusList.map(status => (
+                  <Button
+                    isDisabled={resp.status === status.title}
+                    size="sm"
+                    colorScheme={status.color}
+                    onClick={() => handleChangeStatus(resp.id, status.title)}
+                  >
+                    {status.label}
+                  </Button>
+                ))}
+              </Flex>
               <Divider mb={5} />
             </Stack>
           ))}
         </CardBody>
       </Card>
+      <Pagination totalPages={totalPages} />
     </Stack>
   )
 }

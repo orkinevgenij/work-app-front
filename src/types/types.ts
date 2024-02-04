@@ -3,7 +3,6 @@ export interface IUser {
   name: string
   lastname: string
   phone: string
-
   role: string
   id: number
   accessToken: string
@@ -14,7 +13,7 @@ export type UserArgs = Omit<IUser, 'id' | 'accessToken' | 'refreshToken'> & {
 }
 export type Profile = Pick<
   IUser,
-  'name' | 'lastname' | 'email' | 'phone' | 'role'
+  'id' | 'name' | 'lastname' | 'email' | 'phone' | 'role'
 >
 
 export interface ICompany {
@@ -25,6 +24,7 @@ export interface ICompany {
   createdAt: string
   updatedAt: string
 }
+
 export type CompanyArgs = Pick<ICompany, 'title' | 'description'>
 
 export interface ICategory {
@@ -105,14 +105,21 @@ export type ResumeArgs = Pick<
   | 'profile'
   | 'salary'
 >
-export interface IResponse {
+export interface Response {
   id: number
+  status: string
   createdAt: string
   updatedAt: string
   resume: IResume
   vacancy: Vacancy
   company: ICompany
+  user: IUser
   coverLetter: string
+}
+export interface IResponse {
+  data: Response[]
+  meta: Meta
+  links: ILinks
 }
 export interface ICity {
   id: number

@@ -17,9 +17,9 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import { FC, useState } from 'react'
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
-import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast'
 import { useRegisterMutation } from '../../store/api/services/user'
 import { auth } from '../../store/features/user/authSlice'
@@ -102,7 +102,7 @@ export const Register: FC = () => {
       >
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
           <Stack align={'center'}>
-            <Heading fontSize={'4xl'} textAlign={'center'}>
+            <Heading fontSize={'2xl'} textAlign={'center'}>
               Реєстрація
             </Heading>
           </Stack>
@@ -231,8 +231,18 @@ export const Register: FC = () => {
               </Stack>
               <Stack pt={6}>
                 <Text align={'center'}>
-                  Ви вже з нами?
-                  <Link as={RouterNavLink} color="purple.500" to="/auth/login">
+                  Ви вже з нами?{' '}
+                  <Link
+                    as={RouterNavLink}
+                    sx={{
+                      color: 'purple.500',
+                      _hover: {
+                        textDecoration: 'underline',
+                        color: 'red',
+                      },
+                    }}
+                    to="/auth/login"
+                  >
                     Увійти
                   </Link>
                 </Text>

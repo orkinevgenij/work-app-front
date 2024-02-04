@@ -10,7 +10,7 @@ interface PaginationState {
 const initialState: PaginationState = {
   totalPages: 0,
   currentPage: 1,
-  limit: 2,
+  limit: 5,
 }
 
 export const paginationSlice = createSlice({
