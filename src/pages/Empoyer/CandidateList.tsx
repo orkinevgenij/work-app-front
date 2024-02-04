@@ -1,11 +1,5 @@
-import { Flex, Stack, Text, Link } from '@chakra-ui/layout'
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  textDecoration,
-  useColorModeValue,
-} from '@chakra-ui/react'
+import { Flex, Link, Stack, Text } from '@chakra-ui/layout'
+import { Card, CardBody, CardHeader, useColorModeValue } from '@chakra-ui/react'
 import { NavLink as RouterNavLink } from 'react-router-dom'
 import { formatCurrency } from '../../helpers/currency.helper'
 import { formatDate } from '../../helpers/date.helper'
@@ -29,7 +23,7 @@ export const CandidateList = () => {
             _hover={{
               color: 'purple.400',
               cursor: 'pointer',
-              bg: 'gray.200',
+              bg: useColorModeValue('gray.200', 'black.500'),
             }}
           >
             <CardHeader fontSize="3xl" fontWeight="700">
