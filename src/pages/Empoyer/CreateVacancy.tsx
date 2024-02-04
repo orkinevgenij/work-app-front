@@ -47,36 +47,28 @@ export const CreateVacancy: FC = () => {
   const [createVacancy, { isLoading }] = useCreateVacancyMutation()
   const { showToast } = useShowToast()
 
-  const {
-    handleSubmit,
-    handleChange,
-    setFieldValue,
-    values,
-    touched,
-    errors,
-    resetForm,
-  } = useFormik({
-    initialValues: {
-      company: company?.id,
-      title: '',
-      description: '',
-      salary: undefined,
-      category: undefined,
-      city: undefined,
-    },
-    validationSchema,
-    onSubmit: async (values: IFormValues) => {
-      try {
-        const result = await createVacancy(values).unwrap()
-        if (result) {
-          showToast('Вакансія створена', 'success')
-          resetForm()
+  const { handleSubmit, handleChange, setFieldValue, values, touched, errors } =
+    useFormik({
+      initialValues: {
+        company: company?.id,
+        title: '',
+        description: '',
+        salary: undefined,
+        category: undefined,
+        city: undefined,
+      },
+      validationSchema,
+      onSubmit: async (values: IFormValues) => {
+        try {
+          const result = await createVacancy(values).unwrap()
+          if (result) {
+            showToast('Вакансія створена', 'success')
+          }
+        } catch (error) {
+          if (error) showToast('Не вдалось створити компанію', 'error')
         }
-      } catch (error) {
-        if (error) showToast('Не вдалось створити компанію', 'error')
-      }
-    },
-  })
+      },
+    })
   useEffect(() => {
     setFieldValue('company', company?.id)
   }, [company?.id])
