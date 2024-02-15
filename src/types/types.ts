@@ -92,6 +92,11 @@ export interface IResume {
   user: IUser
   createdAt: string
   updatedAt: string
+  age: string
+  file: {
+    url: string
+    public_id: string
+  }
 }
 
 export type ResumeArgs = Pick<
@@ -104,6 +109,7 @@ export type ResumeArgs = Pick<
   | 'email'
   | 'profile'
   | 'salary'
+  | 'file'
 >
 export interface Response {
   id: number

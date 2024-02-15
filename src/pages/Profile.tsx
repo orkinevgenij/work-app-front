@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardHeader,
@@ -10,20 +9,23 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useProfileQuery } from '../store/api/services/user'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Loader } from '../components/Loader'
 import { ModalComponent } from '../components/ModalComponent'
+import { useProfileQuery } from '../store/api/services/user'
 
 export const Profile: FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const navigate = useNavigate()
-  const { data: profile } = useProfileQuery(undefined, {})
-
+  const { data: profile, isLoading } = useProfileQuery(undefined, {})
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <>
-      <ModalComponent isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <ModalComponent isOpen={isOpen} onClose={onClose} />
       <Stack>
         <Card
           maxW="md"
@@ -44,6 +46,7 @@ export const Profile: FC = () => {
               >
                 Редагувати
               </Button>
+
               <Flex>
                 <Text mr={1}>{profile?.name}</Text>
                 <Text>{profile?.lastname}</Text>

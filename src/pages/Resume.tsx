@@ -1,17 +1,29 @@
-import { useParams } from 'react-router-dom'
-import { useGetOneResumeQuery } from '../store/api/services/resume'
-import { Stack, Heading, Flex, Text, Box } from '@chakra-ui/layout'
-import { useColorModeValue, Icon } from '@chakra-ui/react'
+import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/layout'
+import { Avatar, Icon, useColorModeValue } from '@chakra-ui/react'
 import { FiPhone } from 'react-icons/fi'
 import { MdOutlineEmail } from 'react-icons/md'
+import { NavLink as RouterNavLink, useParams } from 'react-router-dom'
 import { formatCurrency } from '../helpers/currency.helper'
+import { calculateAge, getAgeString } from '../helpers/date.helper'
+import {
+  useGetOneResumeQuery,
+  useOtherResumesUserQuery,
+} from '../store/api/services/resume'
+import { UserOtherResume } from '../components/UserOtherResume'
 
 export const Resume = () => {
   const { id } = useParams()
-  console.log(id)
-  const { data: resume } = useGetOneResumeQuery(id, {})
+  const { data: resume } = useGetOneResumeQuery(id, {
+    refetchOnMountOrArgChange: true,
+  })
+  const { data: otherResumes = [] } = useOtherResumesUserQuery(id, {
+    refetchOnMountOrArgChange: true,
+  })
+  console.log('🚀 ~ Resume ~ similarResume:', otherResumes)
+
   return (
     <Stack align="center">
+      <Avatar bg="purple.500" src={resume?.file.url} mt={5} size="2xl" />
       <Stack
         bg={useColorModeValue('white', 'black.600')}
         rounded={'lg'}
@@ -23,9 +35,17 @@ export const Resume = () => {
         h="40%"
         direction="column"
       >
-        <Heading fontSize="xl" fontWeight="700">
-          {resume?.name} {resume?.lastname}
-        </Heading>
+        <Flex align="center">
+          <Heading fontSize="xl" fontWeight="700" pr={1}>
+            {resume?.name} {resume?.lastname},
+          </Heading>
+          <Text fontSize="xl" fontWeight="700" pr={1}>
+            {calculateAge(resume?.age)}
+          </Text>
+          <Text fontSize="xl" fontWeight="700">
+            {getAgeString(calculateAge(resume?.age))}
+          </Text>
+        </Flex>
         <Flex gap={3}>
           <Text fontSize="xl">Місто:</Text>
           <Text fontSize="xl" fontWeight="700">
@@ -111,6 +131,12 @@ export const Resume = () => {
           <Text fontSize="2xl">{resume?.profile}</Text>
         </Flex>
       </Stack>
+      <Flex direction="column">
+        <Text fontSize="2xl" textAlign="center">
+          Інші резюме цього кандидата
+        </Text>
+        <UserOtherResume otherResumes={otherResumes} />
+      </Flex>
     </Stack>
   )
 }

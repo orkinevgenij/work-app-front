@@ -6,19 +6,22 @@ import { useGetVacancyByCategoryQuery } from '../store/api/services/vacancy'
 import { useAppSelector } from '../store/hooks'
 import { pagination } from '../store/features/pagination/paginationSlice'
 import { filters } from '../store/features/filter/filterSlice'
+import { Loader } from '../components/Loader'
 
 export const VacancyByCategory: FC = () => {
   const { id } = useParams()
   const { limit, currentPage } = useAppSelector(pagination)
   const { sort, order } = useAppSelector(filters)
 
-  const { data: vacancies } = useGetVacancyByCategoryQuery(
+  const { data: vacancies, isLoading } = useGetVacancyByCategoryQuery(
     { id, page: currentPage, limit, sort, order },
     {
       refetchOnMountOrArgChange: true,
     },
   )
-
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <Stack p={10}>
       <VacanciesList vacancies={vacancies} />

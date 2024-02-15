@@ -1,19 +1,34 @@
 import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/layout'
-import { Button, ButtonGroup, Icon, useColorModeValue } from '@chakra-ui/react'
+import {
+  Avatar,
+  Button,
+  ButtonGroup,
+  Icon,
+  useColorModeValue,
+} from '@chakra-ui/react'
+import { FC } from 'react'
 import { FiPhone } from 'react-icons/fi'
 import { MdOutlineEmail } from 'react-icons/md'
-import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
-import { formatCurrency } from '../../helpers/currency.helper'
 import {
-  useGetMyResumeQuery,
+  NavLink as RouterNavLink,
+  useNavigate,
+  useParams,
+} from 'react-router-dom'
+import { useShowToast } from '../../components/hooks/useShowToast'
+import { formatCurrency } from '../../helpers/currency.helper'
+import { calculateAge, getAgeString } from '../../helpers/date.helper'
+import {
+  useGetOneResumeQuery,
   useRemoveResumeMutation,
 } from '../../store/api/services/resume'
-import { useShowToast } from '../../components/hooks/useShowToast'
-import { FC } from 'react'
 
 export const MyResume: FC = () => {
+  const navigate = useNavigate()
+  const { id } = useParams()
   const { showToast } = useShowToast()
-  const { data: resume } = useGetMyResumeQuery(undefined, {})
+  const { data: resume } = useGetOneResumeQuery(id, {
+    refetchOnMountOrArgChange: true,
+  })
   const [remove] = useRemoveResumeMutation()
 
   const handleRemove = async (id: number) => {
@@ -21,6 +36,7 @@ export const MyResume: FC = () => {
       const result = await remove(id)
       if (result) {
         showToast('Резюме удалено', 'warning')
+        navigate('/resume-list')
       }
     } catch (error) {
       console.log(error)
@@ -32,6 +48,7 @@ export const MyResume: FC = () => {
       direction="column"
       bg={useColorModeValue('gray.100', 'black.600')}
     >
+      <Avatar bg="purple.500" src={resume?.file.url} mt={5} size="2xl" />
       {resume ? (
         <>
           <ButtonGroup mt={5} colorScheme="purple" variant="outline">
@@ -57,9 +74,17 @@ export const MyResume: FC = () => {
             h="40%"
             direction="column"
           >
-            <Heading fontSize="xl" fontWeight="700">
-              {resume.name} {resume.lastname}
-            </Heading>
+            <Flex align="center">
+              <Heading fontSize="xl" fontWeight="700" pr={1}>
+                {resume.name} {resume.lastname},
+              </Heading>
+              <Text fontSize="xl" fontWeight="700" pr={1}>
+                {calculateAge(resume.age)}
+              </Text>
+              <Text fontSize="xl" fontWeight="700">
+                {getAgeString(calculateAge(resume.age))}
+              </Text>
+            </Flex>
             <Flex gap={3}>
               <Text fontSize="xl">Місто:</Text>
               <Text fontSize="xl" fontWeight="700">

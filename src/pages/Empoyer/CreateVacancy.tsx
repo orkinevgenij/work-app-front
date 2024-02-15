@@ -39,10 +39,10 @@ const validationSchema = Yup.object({
   city: Yup.number().required('Оберіть місто'),
 })
 export const CreateVacancy: FC = () => {
-  const navigate = useNavigate()
   const { data: company } = useGetMyCompanyQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
+  console.log(company)
   const { data: categories = [] } = useGetCategoryQuery(undefined, {})
   const { data: cities = [] } = useGetCityQuery(undefined, {})
   const [createVacancy, { isLoading }] = useCreateVacancyMutation()
@@ -136,7 +136,9 @@ export const CreateVacancy: FC = () => {
               </FormLabel>
               <Select
                 name="category"
-                onChange={e => setFieldValue('category', +e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setFieldValue('category', +e.target.value)
+                }
                 value={values.category}
                 placeholder="Оберіть категорію"
               >

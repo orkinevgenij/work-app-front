@@ -1,5 +1,6 @@
-import { Box, Heading, Stack, Text } from '@chakra-ui/layout'
+import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/layout'
 import {
+  Avatar,
   Button,
   FormControl,
   FormLabel,
@@ -11,13 +12,17 @@ import { useFormik } from 'formik'
 import { useNavigate, useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 
+import { FC, useEffect } from 'react'
 import { useShowToast } from '../../components/hooks/useShowToast'
 import {
-  useGetMyResumeQuery,
+  useGetOneResumeQuery,
   useUpdateResumeMutation,
 } from '../../store/api/services/resume'
-import { FC, useEffect } from 'react'
-const validationSchema = Yup.object({
+interface FileWithSize extends File {
+  size: number
+}
+
+const validationSchema = Yup.object().shape({
   name: Yup.string().required("Введіть ім'я"),
   lastname: Yup.string().required('Вкажіть прізвищє'),
   position: Yup.string().required('Вкажіть бажану позицію'),
@@ -28,6 +33,18 @@ const validationSchema = Yup.object({
     .required("E-mail обов'язковий"),
   profile: Yup.string().required('Розкажіть про себе'),
   salary: Yup.number().required('Вкажіть бажану заробітну плату'),
+  age: Yup.string().required('Вкажіть дату народження'),
+  file: Yup.mixed().test(
+    'fileSize',
+    'Файл дуже великий, максимум 10 МБ',
+    value => {
+      if (value) {
+        const fileWithSize = value as FileWithSize
+        return fileWithSize.size <= 10 * 1024 * 1024
+      }
+      return true
+    },
+  ),
 })
 interface IFormValues {
   name: string
@@ -38,11 +55,13 @@ interface IFormValues {
   email: string
   profile: string
   salary: number
+  age: string
+  file: ''
 }
 export const EditResume: FC = () => {
   const navigate = useNavigate()
   const { id } = useParams()
-  const { data: resume } = useGetMyResumeQuery(undefined, {})
+  const { data: resume } = useGetOneResumeQuery(id, {})
   const [update, { isLoading }] = useUpdateResumeMutation()
 
   const { showToast } = useShowToast()
@@ -57,19 +76,34 @@ export const EditResume: FC = () => {
         email: '',
         profile: '',
         salary: 0,
+        age: '',
+        file: '',
       },
       validationSchema,
       onSubmit: async (values: IFormValues) => {
-        const data = values
+        console.log('🚀 ~ onSubmit: ~ values:', values)
+        const formData = new FormData()
+        formData.append('file', values.file)
+        formData.append('name', values.name)
+        formData.append('email', values.email)
+        formData.append('lastname', values.lastname)
+        formData.append('position', values.position)
+        formData.append('city', values.city)
+        formData.append('phone', values.phone)
+        formData.append('profile', values.profile)
+        formData.append('age', values.age)
+        formData.append('salary', values.salary.toString())
         try {
-          const result = await update({ data, id }).unwrap()
+          const result = await update({ formData, id }).unwrap()
           if (result) {
             showToast('Резюме оновлено', 'success')
-            navigate('/resume/my')
+            navigate(`/resume/my/${id}`)
           }
         } catch (error) {
           if (error) {
-            showToast('Не вдалось створити резюме', 'error')
+            console.log(error)
+            showToast('Что-то пошло не так', 'error')
+          } else {
           }
         }
       },
@@ -84,10 +118,12 @@ export const EditResume: FC = () => {
     setFieldValue('phone', resume?.phone)
     setFieldValue('email', resume?.email)
     setFieldValue('profile', resume?.profile)
+    setFieldValue('age', resume?.age)
   }, [resume])
 
   return (
     <Box
+      encType="multipart/form-data"
       as="form"
       onSubmit={handleSubmit}
       display="flex"
@@ -106,6 +142,38 @@ export const EditResume: FC = () => {
         <Heading size="md" color="purple.400">
           Редагувати резюме
         </Heading>
+        <Flex direction="column" align="center" textAlign="center">
+          <Avatar
+            src={
+              values?.file
+                ? URL.createObjectURL(values?.file)
+                : resume?.file.url
+            }
+            m={5}
+            size="2xl"
+          />
+          <Box mb={3}>
+            {errors.file ? <Text color="red">{errors.file}</Text> : null}
+          </Box>
+          <FormControl flexDirection="column">
+            <label htmlFor="avatar">
+              <Button as="span" colorScheme="purple" cursor="pointer" size="sm">
+                Змінити фото
+              </Button>
+            </label>
+
+            <Input
+              name="file"
+              type="file"
+              id="avatar"
+              display="none"
+              onChange={(event: any) => {
+                setFieldValue('file', event.currentTarget.files[0])
+              }}
+              accept="image/*"
+            />
+          </FormControl>
+        </Flex>
         <FormControl flexDirection="column">
           <FormLabel
             sx={{
@@ -145,6 +213,25 @@ export const EditResume: FC = () => {
         </FormControl>
         {touched.lastname && errors.lastname ? (
           <Text color="red">{errors.lastname}</Text>
+        ) : null}
+        <FormControl flexDirection="column">
+          <FormLabel
+            sx={{
+              fontSize: '1xl',
+              mb: 5,
+            }}
+          >
+            Дата народження
+          </FormLabel>
+          <Input
+            name="age"
+            type="date"
+            value={values.age}
+            onChange={handleChange}
+          />
+        </FormControl>
+        {touched.age && errors.age ? (
+          <Text color="red">{errors.age}</Text>
         ) : null}
         <FormControl flexDirection="column">
           <FormLabel

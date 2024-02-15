@@ -9,7 +9,7 @@ export const MyCompany: FC = () => {
   const { data: company } = useGetMyCompanyQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
-
+  console.log(company)
   return (
     <Flex align="center" direction="column">
       {company ? (

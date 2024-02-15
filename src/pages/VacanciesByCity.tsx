@@ -6,6 +6,7 @@ import { VacanciesList } from '../components/VacanciesList'
 import { FC } from 'react'
 import { pagination } from '../store/features/pagination/paginationSlice'
 import { filters } from '../store/features/filter/filterSlice'
+import { Loader } from '../components/Loader'
 
 export const VacanciesByCity: FC = () => {
   const { state } = useLocation()
@@ -15,12 +16,15 @@ export const VacanciesByCity: FC = () => {
   const { limit, currentPage } = useAppSelector(pagination)
   const { sort, order } = useAppSelector(filters)
 
-  const { data: vacancies } = useGetVacancyByCityQuery(
+  const { data: vacancies, isLoading } = useGetVacancyByCityQuery(
     { id, page: currentPage, limit, sort, order },
     {
       refetchOnMountOrArgChange: true,
     },
   )
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <Stack p={10}>
       <VacanciesList vacancies={vacancies} city={city} />

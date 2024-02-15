@@ -8,11 +8,10 @@ import {
   Stack,
   Text,
   useColorModeValue,
-  useToast,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { FC } from 'react'
-import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
+import { NavLink as RouterNavLink } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast'
 import { useForgotPasswordMutation } from '../../store/api/services/user'
@@ -23,9 +22,6 @@ const validationSchema = Yup.object({
     .required("E-mail обов'язковий"),
 })
 export const ForgotPassword: FC = () => {
-  const navigate = useNavigate()
-  const toast = useToast()
-
   const { showToast } = useShowToast()
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation()
 

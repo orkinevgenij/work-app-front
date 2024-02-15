@@ -1,9 +1,9 @@
-import { IResume, ResumeArgs } from '../../../types/types'
+import { IResume } from '../../../types/types'
 import { api } from '../api'
 
 export const resumeApi = api.injectEndpoints({
   endpoints: builder => ({
-    createResume: builder.mutation<IResume, ResumeArgs>({
+    createResume: builder.mutation<IResume, FormData>({
       query: data => ({
         url: '/api/resume',
         method: 'POST',
@@ -13,12 +13,12 @@ export const resumeApi = api.injectEndpoints({
     }),
     updateResume: builder.mutation<
       IResume,
-      { data: Partial<IResume>; id: string | undefined }
+      { formData: FormData; id: string | undefined }
     >({
-      query: ({ data, id }) => ({
+      query: ({ formData, id }) => ({
         url: `/api/resume/${id}`,
         method: 'PATCH',
-        body: data,
+        body: formData,
       }),
       invalidatesTags: ['Resume'],
     }),
@@ -26,11 +26,15 @@ export const resumeApi = api.injectEndpoints({
     getOneResume: builder.query<IResume, string | undefined>({
       query: id => `/api/resume/${id}`,
     }),
+    otherResumesUser: builder.query<IResume[], string | undefined>({
+      query: id => `/api/resume/other-resumes/${id}`,
+    }),
     getAllResume: builder.query<IResume[], undefined>({
       query: () => '/api/resume/all',
+      providesTags: ['Resume'],
     }),
-    getMyResume: builder.query<IResume, undefined>({
-      query: () => `/api/resume/my-resume`,
+    getMyResume: builder.query<IResume[], undefined>({
+      query: () => `/api/resume/my-resumes`,
       providesTags: ['Resume'],
     }),
 
@@ -49,5 +53,6 @@ export const {
   useGetMyResumeQuery,
   useUpdateResumeMutation,
   useRemoveResumeMutation,
+  useOtherResumesUserQuery,
   useGetOneResumeQuery,
 } = resumeApi

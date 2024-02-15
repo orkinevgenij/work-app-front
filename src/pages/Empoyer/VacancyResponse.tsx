@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardBody,
@@ -28,6 +29,8 @@ import {
 } from '../../store/features/pagination/paginationSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { Response } from '../../types/types'
+import { Loader } from '../../components/Loader'
+import { EmptyDataMessage } from '../../components/EmptyDataMessage'
 enum ResponseStatus {
   VIEWED = 'Переглянуто',
   INTERVIEW = 'Співбесіда',
@@ -58,7 +61,7 @@ export const VacancyResponse: FC = () => {
   const { data: company } = useGetMyCompanyQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
-  const { data: responses } = useResponseByCompanyQuery(
+  const { data: responses, isLoading } = useResponseByCompanyQuery(
     { id: company?.id, page: currentPage, limit },
     {
       refetchOnMountOrArgChange: true,
@@ -73,8 +76,12 @@ export const VacancyResponse: FC = () => {
   useEffect(() => {
     dispatch(setTotalPage(responses?.meta?.totalPages))
   }, [responses])
+
+  if (isLoading) {
+    return <Loader />
+  }
   if (!responses?.data?.length)
-    return <Text textAlign="center">Відгуків не знайдено &#128546; </Text>
+    return <EmptyDataMessage text={'Відгуків не знайдено'} />
   return (
     <Stack w="90vw" margin="0 auto">
       <Card mt={10} bg={useColorModeValue('white', 'black.600')}>

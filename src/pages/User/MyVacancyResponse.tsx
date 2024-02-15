@@ -11,11 +11,13 @@ import {
 } from '../../store/features/pagination/paginationSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { Response } from '../../types/types'
+import { EmptyDataMessage } from '../../components/EmptyDataMessage'
+import { Loader } from '../../components/Loader'
 
 export const MyVacancyResponse: FC = () => {
   const dispatch = useAppDispatch()
   const { currentPage, limit, totalPages } = useAppSelector(pagination)
-  const { data: responses } = useMyResponseWithPaginateQuery(
+  const { data: responses, isLoading } = useMyResponseWithPaginateQuery(
     { page: currentPage, limit },
     {
       refetchOnMountOrArgChange: true,
@@ -26,8 +28,11 @@ export const MyVacancyResponse: FC = () => {
     dispatch(setTotalPage(responses?.meta?.totalPages))
   }, [responses])
 
+  if (isLoading) {
+    return <Loader />
+  }
   if (!responses?.data?.length)
-    return <Text textAlign="center">Відгуків не знайдено &#128546; </Text>
+    return <EmptyDataMessage text={'Відгуків не знайдено'} />
   return (
     <>
       <Heading textAlign="center" size="md">
@@ -60,7 +65,7 @@ export const MyVacancyResponse: FC = () => {
                   <Flex direction="column">
                     <Link
                       as={RouterNavLink}
-                      to={`/resume/my`}
+                      to={`/resume/my/${resp.resume.id}`}
                       color="purple.400"
                       fontWeight="bold"
                       width="fit-content"

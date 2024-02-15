@@ -24,7 +24,13 @@ import { useShowToast } from '../../components/hooks/useShowToast'
 import { useRegisterMutation } from '../../store/api/services/user'
 import { auth } from '../../store/features/user/authSlice'
 import { useAppDispatch } from '../../store/hooks'
-
+interface ErrorResponse {
+  data: {
+    error: string
+    message: string
+  }
+  status: number
+}
 interface IFormValues {
   name: string
   lastname: string
@@ -84,8 +90,13 @@ export const Register: FC = () => {
             showToast('Реєстрація успішна', 'success')
             navigate('/')
           }
-        } catch (error) {
-          if (error) showToast('Данний E-mail вже існує ', 'error')
+        } catch (error: unknown) {
+          const customError = error as ErrorResponse
+          const errorMessage =
+            customError && customError.data
+              ? customError.data.message
+              : 'An error occurred'
+          showToast(errorMessage, 'warning')
         }
       },
     })

@@ -57,9 +57,9 @@ export const UserDashboard: FC = () => {
           display="flex"
           alignItems="center"
         >
-          <NavLink to="/resume/my">
+          <NavLink to="/resume-list">
             <Icon as={FaPlus} boxSize={20} color="gray.500" />
-            <Text>Резюме</Text>
+            <Text>Мої резюме</Text>
           </NavLink>
         </Box>
       </Flex>

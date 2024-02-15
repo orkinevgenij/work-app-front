@@ -31,8 +31,11 @@ import { useRemoveVacancyMutation } from '../store/api/services/vacancy'
 import { setFilter } from '../store/features/filter/filterSlice'
 import { setTotalPage } from '../store/features/pagination/paginationSlice'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { IResponse, IVacancy, Response } from '../types/types'
+import { IVacancy, Response } from '../types/types'
+import { Loader } from './Loader'
 import { Pagination } from './Pagination'
+import { EmptyDataMessage } from './EmptyDataMessage'
+
 type Sorting = {
   name: string
   value: string
@@ -46,16 +49,16 @@ const sorting: Sorting[] = [
 type Props = {
   vacancies?: IVacancy
   city?: string
+  isLoading?: boolean
 }
 
-export const VacanciesList: FC<Props> = ({ vacancies, city }) => {
+export const VacanciesList: FC<Props> = ({ vacancies, city, isLoading }) => {
   const { pathname } = useLocation()
   const dispatch = useAppDispatch()
   const { totalPages } = useAppSelector(state => state.pagination)
   const { data: responses = [] } = useMyResponseQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
-  console.log(responses)
   const [remove] = useRemoveVacancyMutation()
 
   const handleRemove = async (id: number) => {
@@ -70,8 +73,11 @@ export const VacanciesList: FC<Props> = ({ vacancies, city }) => {
     dispatch(setTotalPage(vacancies?.meta?.totalPages))
   }, [vacancies])
 
+  if (isLoading) {
+    return <Loader />
+  }
   if (!vacancies?.data?.length)
-    return <Text textAlign="center">Вакансій не знайдено &#128546; </Text>
+    return <EmptyDataMessage text={'Вакансій не знайдено'} />
   return (
     <>
       <Flex direction="column" w="90%" margin="0 auto" pb={5}>

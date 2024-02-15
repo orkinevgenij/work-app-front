@@ -21,7 +21,13 @@ import { useLoginMutation } from '../../store/api/services/user'
 import { auth } from '../../store/features/user/authSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
-
+interface ErrorResponse {
+  data: {
+    error: string
+    message: string
+  }
+  status: number
+}
 const validationSchema = Yup.object({
   email: Yup.string()
     .email('Введіть вірний E-mail')
@@ -36,7 +42,6 @@ export const Login: FC = () => {
   const { accessToken } = useAppSelector(state => state.auth)
   const { showToast } = useShowToast()
   const [login, { isLoading }] = useLoginMutation()
-
   const { handleSubmit, handleChange, values, touched, errors } = useFormik({
     initialValues: {
       email: '',
@@ -51,18 +56,21 @@ export const Login: FC = () => {
         }).unwrap()
         if (result) {
           showToast('Ви увійшли', 'success')
-        }
-        if (result) {
           dispatch(
             auth({
               accessToken: result.accessToken || '',
               role: result.role || '',
             }),
           )
+          navigate('/')
         }
-        navigate('/')
-      } catch (error) {
-        if (error) showToast('Не дійсний пароль або email', 'error')
+      } catch (error: unknown) {
+        const customError = error as ErrorResponse
+        const errorMessage =
+          customError && customError.data
+            ? customError.data.message
+            : 'An error occurred'
+        showToast(errorMessage, 'error')
       }
     },
   })

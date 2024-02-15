@@ -5,7 +5,7 @@ export const companyApi = api.injectEndpoints({
   endpoints: builder => ({
     createCompany: builder.mutation<ICompany, CompanyArgs>({
       query: data => ({
-        url: 'api/company',
+        url: '/api/company',
         method: 'POST',
         body: data,
       }),

@@ -1,7 +1,7 @@
 import { IResponse, Response } from '../../../types/types'
 import { api } from '../api'
 enum ResponseStatus {
-  UNVIEWED = 'Не переглянуто',
+  SENT = 'Відправлено',
   VIEWED = 'Переглянуто',
   INTERVIEW = 'Співбесіда',
   REFUSAL = 'Відмова',

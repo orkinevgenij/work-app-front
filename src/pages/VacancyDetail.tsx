@@ -1,14 +1,5 @@
 import { ChevronDownIcon } from '@chakra-ui/icons'
-import {
-  Box,
-  Divider,
-  Flex,
-  HStack,
-  Heading,
-  Stack,
-  Text,
-  VStack,
-} from '@chakra-ui/layout'
+import { Divider, Flex, HStack, Heading, Stack, Text } from '@chakra-ui/layout'
 import {
   Button,
   Card,
@@ -31,6 +22,7 @@ import { IoArrowBack } from 'react-icons/io5'
 import { MdCorporateFare } from 'react-icons/md'
 import { PiCurrencyDollarSimpleFill } from 'react-icons/pi'
 import { NavLink as RouterNavLink, useParams } from 'react-router-dom'
+import { Loader } from '../components/Loader'
 import { useShowToast } from '../components/hooks/useShowToast'
 import { formatCurrency } from '../helpers/currency.helper'
 import { formatDate } from '../helpers/date.helper'
@@ -40,19 +32,26 @@ import {
   useGetOneVacancyQuery,
   useGetSimilarVacancyQuery,
 } from '../store/api/services/vacancy'
-import { Vacancy } from '../types/types'
-
+import { IResume } from '../types/types'
+import { SimilarVacancies } from '../components/SimilarVacancies'
+interface ErrorResponse {
+  data: {
+    error: string
+    message: string
+  }
+  status: number
+}
 export const VacancyDetail: FC = () => {
-  const [isVisible, setIsVisible] = useState<boolean>(false)
   const [coverLetter, setCoverLetter] = useState<string>('')
+  const [resumeId, setResumeId] = useState<number>()
+  const [isVisible, setIsVisible] = useState<boolean>(false)
   const blockRef = useRef<HTMLDivElement>(null)
-
   const { id } = useParams()
   const { showToast } = useShowToast()
-  const { data: resume } = useGetMyResumeQuery(undefined, {
+  const { data: resumes = [] } = useGetMyResumeQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
-  const { data: vacancy } = useGetOneVacancyQuery(id, {})
+  const { data: vacancy, isLoading } = useGetOneVacancyQuery(id, {})
 
   const { data: similarVacancies = [] } = useGetSimilarVacancyQuery(
     {
@@ -69,14 +68,17 @@ export const VacancyDetail: FC = () => {
     try {
       await createResponse({
         vacancy: vacancy?.id,
-        resume: resume?.id,
+        resume: resumeId,
         coverLetter,
       }).unwrap()
       showToast('Відгук відправлений', 'success')
-    } catch (error) {
-      if (error) {
-        showToast('Відгук вже відправлений', 'info')
-      }
+    } catch (error: unknown) {
+      const customError = error as ErrorResponse
+      const errorMessage =
+        customError && customError.data
+          ? customError.data.message
+          : 'An error occurred'
+      showToast(errorMessage, 'info')
     }
   }
 
@@ -85,6 +87,15 @@ export const VacancyDetail: FC = () => {
       blockRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }, [isVisible])
+
+  useEffect(() => {
+    if (resumes.length > 0) {
+      setResumeId(resumes[0].id)
+    }
+  }, [resumes])
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <>
       <Flex direction="column" align="center">
@@ -115,6 +126,7 @@ export const VacancyDetail: FC = () => {
             >
               Відгукнутися
             </Button>
+
             <Menu>
               <MenuButton as={Button} ml="auto" rightIcon={<ChevronDownIcon />}>
                 Щє
@@ -191,8 +203,15 @@ export const VacancyDetail: FC = () => {
               <Text fontWeight="bold" m={5}>
                 Резюме
               </Text>
-              <Select mb={5}>
-                <option>{resume?.position}</option>
+              <Select
+                mb={5}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setResumeId(+e.target.value)
+                }
+              >
+                {resumes?.map((resume: IResume) => (
+                  <option value={resume.id}>{resume?.position}</option>
+                ))}
               </Select>
               <Button onClick={responseVacancy} colorScheme="purple">
                 Надіслати
@@ -205,29 +224,7 @@ export const VacancyDetail: FC = () => {
         <Heading size="xl" fontWeight="500" mb={5}>
           Схожі вакансії
         </Heading>
-        {similarVacancies.map((vacancy: Vacancy) => (
-          <Box key={vacancy.id} w="80vw">
-            <Flex gap={3}>
-              <Heading
-                size="md"
-                fontWeight="500"
-                color="purple.400"
-                as={RouterNavLink}
-                to={`/vacancy/${vacancy.id}`}
-              >
-                {vacancy?.title}
-              </Heading>
-              <Text fontWeight="700">
-                {' '}
-                {formatCurrency.format(vacancy?.salary)}
-              </Text>
-            </Flex>
-            <Flex gap={3}>
-              <Text fontWeight="700">{vacancy?.company.title}</Text>
-              <Text>{vacancy?.city?.name}</Text>
-            </Flex>
-          </Box>
-        ))}
+        <SimilarVacancies similarVacancies={similarVacancies}/>
       </Flex>
     </>
   )

@@ -9,13 +9,13 @@ import { pagination } from '../store/features/pagination/paginationSlice'
 export const SearchVacancy: FC = () => {
   const title = useAppSelector(searchValue)
   const { limit, currentPage } = useAppSelector(pagination)
-  const { data: vacancies } = useSearchVacancyQuery(
+  const { data: vacancies, isLoading } = useSearchVacancyQuery(
     { title, page: currentPage, limit },
     {},
   )
   return (
     <Stack p={10}>
-      <VacanciesList vacancies={vacancies} />
+      <VacanciesList vacancies={vacancies} isLoading={isLoading} />
     </Stack>
   )
 }

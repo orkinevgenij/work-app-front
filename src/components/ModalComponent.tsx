@@ -18,10 +18,17 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import * as Yup from 'yup'
 import { useChangePasswordMutation } from '../store/api/services/user'
 import { useShowToast } from './hooks/useShowToast'
+interface ErrorResponse {
+  data: {
+    error: string
+    message: string
+  }
+  status: number
+}
 interface IFormValues {
   currentPassword: string
   newPassword: string
@@ -38,17 +45,17 @@ const validationSchema = Yup.object({
     .oneOf([Yup.ref('newPassword')], 'Паролі повинні збігатися')
     .required('Введіть ваш пароль'),
 })
-export const ModalComponent = ({ isOpen, onOpen, onClose }: any) => {
+type Props = {
+  isOpen: boolean
+  onClose: () => void
+}
+export const ModalComponent: FC<Props> = ({ isOpen, onClose }) => {
   const [showCurrentPassword, setShowCurrentPassword] = useState<boolean>(false)
   const [showNewPassword, setShowNewPassword] = useState<boolean>(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false)
   const [changePassword] = useChangePasswordMutation()
   const { showToast } = useShowToast()
-  interface CustomError {
-    data?: {
-      message?: string
-    }
-  }
+
   const { handleSubmit, handleChange, resetForm, values, touched, errors } =
     useFormik({
       initialValues: {
@@ -69,9 +76,12 @@ export const ModalComponent = ({ isOpen, onOpen, onClose }: any) => {
             showToast('Пароль успішно змінено', 'success')
           }
         } catch (error: unknown) {
-          const customError = error as CustomError
-          console.log(customError)
-          showToast('Не вірний пароль', 'error')
+          const customError = error as ErrorResponse
+          const errorMessage =
+            customError && customError.data
+              ? customError.data.message
+              : 'An error occurred'
+          showToast(errorMessage, 'error')
         }
       },
     })
@@ -162,7 +172,7 @@ export const ModalComponent = ({ isOpen, onOpen, onClose }: any) => {
               ) : null}
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={onClose}>
+              <Button colorScheme="purple" mr={3} onClick={onClose}>
                 Скасувати
               </Button>
               <Button type="submit" variant="ghost">

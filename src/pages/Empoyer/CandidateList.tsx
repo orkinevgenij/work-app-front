@@ -2,16 +2,25 @@ import { Flex, Link, Stack, Text } from '@chakra-ui/layout'
 import { Card, CardBody, CardHeader, useColorModeValue } from '@chakra-ui/react'
 import { NavLink as RouterNavLink } from 'react-router-dom'
 import { formatCurrency } from '../../helpers/currency.helper'
-import { formatDate } from '../../helpers/date.helper'
+import {
+  calculateAge,
+  formatDate,
+  getAgeString,
+} from '../../helpers/date.helper'
 import { useGetAllResumeQuery } from '../../store/api/services/resume'
 import { IResume } from '../../types/types'
 
 export const CandidateList = () => {
-  const { data: candidates } = useGetAllResumeQuery(undefined)
+  const { data: candidates } = useGetAllResumeQuery(undefined, {
+    refetchOnMountOrArgChange: true,
+  })
+  console.log('🚀 ~ CandidateList ~ candidates:', candidates)
+
   return (
     <Stack w="90vw" margin="0 auto">
       {candidates?.map((candidate: IResume) => (
         <Link
+          key={candidate.id}
           as={RouterNavLink}
           to={`/resume/${candidate.id}`}
           color="purple.400"
@@ -38,6 +47,12 @@ export const CandidateList = () => {
                   <Flex>
                     <Text fontSize="md" mr={1}>
                       {candidate.name},
+                    </Text>
+                    <Text fontSize="md" fontWeight="700" pr={1}>
+                      {calculateAge(candidate.age)}
+                    </Text>
+                    <Text fontSize="md" fontWeight="700" pr={1}>
+                      {getAgeString(calculateAge(candidate.age))},
                     </Text>
                     <Text fontSize="md">{candidate.city}</Text>
                   </Flex>

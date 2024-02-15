@@ -37,6 +37,7 @@ import { Resume } from '../pages/Resume'
 import { CoverLetter } from '../pages/Empoyer/CoverLetter'
 import { ForgotPassword } from '../pages/Auth/ForgotPassword'
 import { CandidateList } from '../pages/Empoyer/CandidateList'
+import { ResumeList } from '../pages/User/ResumeList'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -85,14 +86,15 @@ export const router = createBrowserRouter(
       <Route path="cover-letter" element={<CoverLetter />} />
 
       {/* Resume */}
-      <Route path="resume/:id" element={<Resume />} />
       <Route path="" element={<UserPrivateRoute />}>
         <Route path="resume/create" element={<CreateResume />} />
       </Route>
 
-      <Route path="" element={<UserPrivateRoute />}>
-        <Route path="resume/my" element={<MyResume />} />
-      </Route>
+      <Route path="resume/:id" element={<Resume />} />
+      <Route path="resume/my/:id" element={<MyResume />} />
+      <Route path="resume-list" element={<ResumeList />} />
+
+      <Route path="" element={<UserPrivateRoute />}></Route>
 
       <Route path="" element={<UserPrivateRoute />}>
         <Route path="resume/edit/:id" element={<EditResume />} />
