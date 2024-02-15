@@ -5,7 +5,7 @@ const baseQuery = fetchBaseQuery({
   baseUrl:
     import.meta.env.MODE === 'development'
       ? 'http://localhost:8000'
-      : 'https://work-api-9an8.onrender.com',
+      : 'https://work-app-2jgg.onrender.com',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState
     const token = state?.auth?.accessToken
