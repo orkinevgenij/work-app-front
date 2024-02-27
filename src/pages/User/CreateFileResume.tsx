@@ -104,7 +104,6 @@ export const CreateFileResume: FC = () => {
       },
     })
   return (
-    <>
       <Box
         encType="multipart/form-data"
         as="form"
@@ -284,6 +283,5 @@ export const CreateFileResume: FC = () => {
           </Button>
         </Stack>
       </Box>
-    </>
   )
 }

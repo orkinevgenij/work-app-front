@@ -14,7 +14,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast.tsx'
@@ -122,6 +122,9 @@ export const CreateResume: FC = () => {
         }
       },
     })
+  useEffect(()=>{
+    setFieldValue('city', cities[1]?.name)
+  },[cities])
   return (
     <>
       <Box
@@ -216,7 +219,6 @@ export const CreateResume: FC = () => {
           {touched.lastname && errors.lastname ? (
             <Text color="red">{errors.lastname}</Text>
           ) : null}
-
           <FormControl flexDirection="column">
             <FormLabel
               sx={{

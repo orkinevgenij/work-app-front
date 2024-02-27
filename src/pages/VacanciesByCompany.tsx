@@ -12,7 +12,6 @@ export const VacanciesByCompany: FC = () => {
   const { id } = useParams()
   const { limit, currentPage } = useAppSelector(pagination)
   const { sort, order } = useAppSelector(filters)
-
   const { data: vacancies, isLoading } = useGetVacancyByCompanyQuery(
     { id, page: currentPage, limit, sort, order },
     {

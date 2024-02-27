@@ -128,7 +128,6 @@ export const Resume = () => {
         </Flex>
       </Stack>
       {resume?.file && <PDFViewer fileUrl={resume?.file.url} />}
-
       {resume?.profile && (
         <Stack
           direction="column"

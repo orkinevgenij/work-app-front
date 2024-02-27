@@ -1,16 +1,8 @@
 import {
-  Button,
   Circle,
   Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
   Heading,
   Icon,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Link,
   SimpleGrid,
   Text,
   useColorModeValue,
@@ -19,7 +11,8 @@ import { FC } from 'react'
 import { BiCategory } from 'react-icons/bi'
 import { FaCity } from 'react-icons/fa'
 import { IoSearchCircleSharp } from 'react-icons/io5'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import { SearchForm } from '../components/SearchForm'
 import { VacanciesList } from '../components/VacanciesList'
 import { formatCurrency } from '../helpers/currency.helper'
 import {
@@ -28,15 +21,11 @@ import {
 } from '../store/api/services/vacancy'
 import { filters } from '../store/features/filter/filterSlice'
 import { pagination } from '../store/features/pagination/paginationSlice'
-import { searchValue, setSearch } from '../store/features/search/searchSlice'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { useAppSelector } from '../store/hooks'
 
 export const Home: FC = () => {
-  const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const { currentPage, limit } = useAppSelector(pagination)
   const { sort, order } = useAppSelector(filters)
-  const search = useAppSelector(searchValue)
   const { data: vacancies } = useGetVacancyPaginationQuery(
     {
       page: currentPage,
@@ -52,64 +41,7 @@ export const Home: FC = () => {
 
   return (
     <>
-      <form>
-        <FormControl
-          bg={useColorModeValue('purple.400', 'black.700')}
-          display="flex"
-          flexDirection="column"
-          height="max-content"
-          p={5}
-          mb={5}
-        >
-          <FormLabel
-            sx={{
-              fontSize: '3xl',
-              color: 'white',
-              mb: 5,
-            }}
-          >
-            Сайт пошуку роботи №1 в Україні
-            <Text fontSize="md" opacity="0.8">
-              Зараз у нас {vacancies?.meta?.totalItems} актуальних вакансій.
-            </Text>
-          </FormLabel>
-          <InputGroup size="md">
-            <Input
-              bg="gray.100"
-              color="gray"
-              value={search}
-              type="search"
-              onChange={e => dispatch(setSearch(e.target.value))}
-              placeholder="Посада"
-              mb={5}
-            />
-            <InputRightElement width="9rem">
-              <Button
-                type="submit"
-                onClick={() => navigate('vacancy/search')}
-                colorScheme="pink"
-              >
-                Знайти вакансії
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-          <FormHelperText color="white" fontSize="md">
-            Наприклад:
-            <Flex gap={2}>
-              <Text as={Link} onClick={() => dispatch(setSearch('касир'))}>
-                касир
-              </Text>
-              <Text as={Link} onClick={() => dispatch(setSearch('продавець'))}>
-                продавець
-              </Text>
-              <Text>або</Text>
-              <Text as={Link} onClick={() => dispatch(setSearch('водій'))}>
-                водій
-              </Text>
-            </Flex>
-          </FormHelperText>
-        </FormControl>
-      </form>
+      <SearchForm vacancies={vacancies} />
       <SimpleGrid columns={[1, 3]} spacing={3}>
         <Flex
           sx={{

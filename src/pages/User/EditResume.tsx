@@ -40,7 +40,7 @@ const validationSchema = Yup.object().shape({
   profile: Yup.string().required('Розкажіть про себе'),
   salary: Yup.number().required('Вкажіть бажану заробітну плату'),
   age: Yup.string().required('Вкажіть дату народження'),
-  file: Yup.mixed().test(
+  file: Yup.mixed().nullable().test(
     'fileSize',
     'Файл дуже великий, максимум 10 МБ',
     value => {

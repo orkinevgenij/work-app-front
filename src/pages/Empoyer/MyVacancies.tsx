@@ -1,10 +1,10 @@
 import { Stack } from '@chakra-ui/layout'
+import { FC } from 'react'
 import { VacanciesList } from '../../components/VacanciesList'
 import { useGetMyCompanyQuery } from '../../store/api/services/company'
 import { useGetVacancyByCompanyQuery } from '../../store/api/services/vacancy'
-import { FC } from 'react'
-import { useAppSelector } from '../../store/hooks'
 import { filters } from '../../store/features/filter/filterSlice'
+import { useAppSelector } from '../../store/hooks'
 
 export const MyVacancies: FC = () => {
   const { limit, currentPage } = useAppSelector(state => state.pagination)

@@ -11,7 +11,6 @@ import { useAppSelector } from '../store/hooks'
 export const VacanciesByCity: FC = () => {
   const { state } = useLocation()
   const { city } = state
-  console.log('🚀 ~ city:', city)
   const { id } = useParams()
   const { limit, currentPage } = useAppSelector(pagination)
   const { sort, order } = useAppSelector(filters)
