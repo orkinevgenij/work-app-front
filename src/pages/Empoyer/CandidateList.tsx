@@ -35,15 +35,32 @@ export const CandidateList = () => {
               bg: useColorModeValue('gray.200', 'black.500'),
             }}
           >
+            {candidate.file && (
+              <Text
+                sx={{
+                  borderRadius: '15px',
+                  fontSize: '12px',
+                  p: '3px 15px 3px 15px',
+                  m: 3,
+                  bg: 'purple.400',
+                  color: 'white',
+                  w: 'max-content',
+                }}
+              >
+                Файл
+              </Text>
+            )}
             <CardHeader fontSize="3xl" fontWeight="700">
               {candidate.position}
             </CardHeader>
             <CardBody>
               <Stack>
                 <Flex direction="column">
-                  <Text fontWeight="700">
-                    {formatCurrency.format(candidate.salary)}
-                  </Text>
+                  {candidate.salary && (
+                    <Text fontWeight="700">
+                      {formatCurrency.format(candidate.salary)}
+                    </Text>
+                  )}
                   <Flex>
                     <Text fontSize="md" mr={1}>
                       {candidate.name},

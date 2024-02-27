@@ -2,6 +2,8 @@ import { Divider, Flex, Heading, Link, Stack, Text } from '@chakra-ui/layout'
 import { Card, CardBody, CardFooter, useColorModeValue } from '@chakra-ui/react'
 import { FC, useEffect } from 'react'
 import { NavLink as RouterNavLink } from 'react-router-dom'
+import { EmptyDataMessage } from '../../components/EmptyDataMessage'
+import { Loader } from '../../components/Loader'
 import { Pagination } from '../../components/Pagination'
 import { formatDate } from '../../helpers/date.helper'
 import { useMyResponseWithPaginateQuery } from '../../store/api/services/response'
@@ -11,8 +13,6 @@ import {
 } from '../../store/features/pagination/paginationSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { Response } from '../../types/types'
-import { EmptyDataMessage } from '../../components/EmptyDataMessage'
-import { Loader } from '../../components/Loader'
 
 export const MyVacancyResponse: FC = () => {
   const dispatch = useAppDispatch()

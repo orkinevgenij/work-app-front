@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { api } from './api/api'
-import authSlice from './features/user/authSlice'
-import searchSlice from './features/search/searchSlice'
-import paginationSlice from './features/pagination/paginationSlice'
 import filterSlice from './features/filter/filterSlice'
+import paginationSlice from './features/pagination/paginationSlice'
+import searchSlice from './features/search/searchSlice'
+import authSlice from './features/user/authSlice'
 
 const store = configureStore({
   reducer: {

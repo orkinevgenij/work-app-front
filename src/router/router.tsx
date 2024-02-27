@@ -38,6 +38,8 @@ import { CoverLetter } from '../pages/Empoyer/CoverLetter'
 import { ForgotPassword } from '../pages/Auth/ForgotPassword'
 import { CandidateList } from '../pages/Empoyer/CandidateList'
 import { ResumeList } from '../pages/User/ResumeList'
+import { CreateFileResume } from '../pages/User/CreateFileResume'
+import { EditResumeWithFile } from '../pages/User/EditResumeWithFile'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -79,7 +81,6 @@ export const router = createBrowserRouter(
       <Route path="" element={<EmployerPrivateRoute />}>
         <Route path="response" element={<VacancyResponse />} />
       </Route>
-
       <Route path="" element={<UserPrivateRoute />}>
         <Route path="response/user" element={<MyVacancyResponse />} />
       </Route>
@@ -88,17 +89,17 @@ export const router = createBrowserRouter(
       {/* Resume */}
       <Route path="" element={<UserPrivateRoute />}>
         <Route path="resume/create" element={<CreateResume />} />
+        <Route
+          path="resume/create/resume-file"
+          element={<CreateFileResume />}
+        />
+        <Route path="resume/edit/:id" element={<EditResume />} />
+        <Route path="resume/edit/file/:id" element={<EditResumeWithFile />} />
+        <Route path="resume/resume-list" element={<ResumeList />} />
       </Route>
 
       <Route path="resume/:id" element={<Resume />} />
       <Route path="resume/my/:id" element={<MyResume />} />
-      <Route path="resume-list" element={<ResumeList />} />
-
-      <Route path="" element={<UserPrivateRoute />}></Route>
-
-      <Route path="" element={<UserPrivateRoute />}>
-        <Route path="resume/edit/:id" element={<EditResume />} />
-      </Route>
 
       {/* List city, companies */}
       <Route path="cities" element={<Cities />} />

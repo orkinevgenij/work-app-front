@@ -1,4 +1,3 @@
-import React, { ReactNode } from 'react'
 import {
   Box,
   Container,
@@ -10,6 +9,7 @@ import {
   chakra,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { ReactNode } from 'react'
 import { FaInstagram } from 'react-icons/fa'
 import { NavLink as RouterNavLink } from 'react-router-dom'
 

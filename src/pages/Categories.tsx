@@ -8,12 +8,12 @@ import {
   UnorderedList,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { FC } from 'react'
 import { NavLink as RouterNavLink } from 'react-router-dom'
 import { countByCategory } from '../helpers/vacancyCounter'
 import { useGetCategoryQuery } from '../store/api/services/category'
 import { useGetAllVacancyQuery } from '../store/api/services/vacancy'
 import { ICategory } from '../types/types'
-import { FC } from 'react'
 export const Categories: FC = () => {
   const { data: categories = [] } = useGetCategoryQuery(undefined, {})
   const { data: vacancies = [] } = useGetAllVacancyQuery(undefined, {})

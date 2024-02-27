@@ -1,7 +1,7 @@
-import { Button, Flex, Image, Text } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 import { ArrowBackIcon } from '@chakra-ui/icons'
+import { Button, Flex, Image, Text } from '@chakra-ui/react'
 import { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const ErrorPage: FC = () => {
   const navigate = useNavigate()

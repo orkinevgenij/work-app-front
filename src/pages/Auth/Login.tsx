@@ -1,3 +1,4 @@
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -20,7 +21,6 @@ import { useShowToast } from '../../components/hooks/useShowToast'
 import { useLoginMutation } from '../../store/api/services/user'
 import { auth } from '../../store/features/user/authSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 interface ErrorResponse {
   data: {
     error: string

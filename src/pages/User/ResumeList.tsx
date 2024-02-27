@@ -1,22 +1,26 @@
-import { Box, Flex, Link, Stack, Text } from '@chakra-ui/layout'
-import { NavLink as RouterNavLink } from 'react-router-dom'
-import { useGetMyResumeQuery } from '../../store/api/services/resume'
 import {
-  Card,
-  useColorModeValue,
-  CardHeader,
-  CardBody,
+  Box,
   Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  Link,
+  Stack,
+  Text,
+  useColorModeValue,
 } from '@chakra-ui/react'
+import { NavLink as RouterNavLink } from 'react-router-dom'
 import { formatCurrency } from '../../helpers/currency.helper'
 import { formatDate } from '../../helpers/date.helper'
+import { useGetMyResumeQuery } from '../../store/api/services/resume'
 import { IResume } from '../../types/types'
 
 export const ResumeList = () => {
   const { data: resumes = [] } = useGetMyResumeQuery(undefined, {})
 
   return (
-    <Stack w="90vw" margin="0 auto">
+    <Stack w="80vw" margin="0 auto">
       {resumes.length ? (
         resumes?.map((resume: IResume) => (
           <Link
@@ -35,15 +39,32 @@ export const ResumeList = () => {
                 bg: useColorModeValue('gray.200', 'black.500'),
               }}
             >
+              {resume.file && (
+                <Text
+                  sx={{
+                    borderRadius: '15px',
+                    fontSize: '12px',
+                    p: '3px 15px 3px 15px',
+                    m: 3,
+                    bg: 'purple.400',
+                    color: 'white',
+                    w: 'max-content',
+                  }}
+                >
+                  Файл
+                </Text>
+              )}
               <CardHeader fontSize="3xl" fontWeight="700">
                 {resume.position}
               </CardHeader>
               <CardBody>
                 <Stack>
                   <Flex direction="column">
-                    <Text fontWeight="700">
-                      {formatCurrency.format(resume.salary)}
-                    </Text>
+                    {resume.salary && (
+                      <Text fontWeight="700">
+                        {formatCurrency.format(resume.salary)}
+                      </Text>
+                    )}
                     <Flex>
                       <Text fontSize="md" mr={1}>
                         {resume.name},

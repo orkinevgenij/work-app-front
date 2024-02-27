@@ -22,6 +22,17 @@ export const resumeApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Resume'],
     }),
+    updateResumeWithFile: builder.mutation<
+      IResume,
+      { formData: FormData; id: string | undefined }
+    >({
+      query: ({ formData, id }) => ({
+        url: `/api/resume/file/${id}`,
+        method: 'PATCH',
+        body: formData,
+      }),
+      invalidatesTags: ['Resume'],
+    }),
 
     getOneResume: builder.query<IResume, string | undefined>({
       query: id => `/api/resume/${id}`,
@@ -52,6 +63,7 @@ export const {
   useGetAllResumeQuery,
   useGetMyResumeQuery,
   useUpdateResumeMutation,
+  useUpdateResumeWithFileMutation,
   useRemoveResumeMutation,
   useOtherResumesUserQuery,
   useGetOneResumeQuery,

@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardBody,
@@ -15,10 +14,11 @@ import {
 } from '@chakra-ui/react'
 import { FC, useEffect } from 'react'
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
+import { EmptyDataMessage } from '../../components/EmptyDataMessage'
+import { Loader } from '../../components/Loader'
+import { Pagination } from '../../components/Pagination'
 import { formatDate } from '../../helpers/date.helper'
 import { useGetMyCompanyQuery } from '../../store/api/services/company'
-
-import { Pagination } from '../../components/Pagination'
 import {
   useChangeStatusResponseMutation,
   useResponseByCompanyQuery,
@@ -29,8 +29,6 @@ import {
 } from '../../store/features/pagination/paginationSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { Response } from '../../types/types'
-import { Loader } from '../../components/Loader'
-import { EmptyDataMessage } from '../../components/EmptyDataMessage'
 enum ResponseStatus {
   VIEWED = 'Переглянуто',
   INTERVIEW = 'Співбесіда',
@@ -136,18 +134,6 @@ export const VacancyResponse: FC = () => {
                   </Text>
                 </Flex>
               </CardFooter>
-              <Text
-                sx={{
-                  border: '2px solid',
-                  borderColor: 'gray.300',
-                  borderRadius: 'lg',
-                  padding: '5px',
-                }}
-                variant="outline"
-                width="fit-content"
-              >
-                {resp.status}
-              </Text>
               <Flex gap={3}>
                 {statusList.map(status => (
                   <Button

@@ -1,16 +1,15 @@
-import { Box, Flex, Stack, Text } from '@chakra-ui/layout'
+import { Flex, Stack, Text } from '@chakra-ui/layout'
 import {
-  Button,
   Card,
   CardBody,
   CardHeader,
-  useColorModeValue,
   Link,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { NavLink as RouterNavLink } from 'react-router-dom'
 import { formatCurrency } from '../helpers/currency.helper'
-import { IResume } from '../types/types'
 import { formatDate } from '../helpers/date.helper'
+import { IResume } from '../types/types'
 
 export const UserOtherResume = ({ otherResumes }: any) => {
   return (
@@ -38,9 +37,11 @@ export const UserOtherResume = ({ otherResumes }: any) => {
             <CardBody>
               <Stack>
                 <Flex direction="column">
-                  <Text fontWeight="700">
-                    {formatCurrency.format(resume.salary)}
-                  </Text>
+                  {resume.salary && (
+                    <Text fontWeight="700">
+                      {formatCurrency.format(resume.salary)}
+                    </Text>
+                  )}
                   <Flex>
                     <Text fontSize="md" mr={1}>
                       {resume.name},

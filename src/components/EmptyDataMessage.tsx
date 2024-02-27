@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/layout'
+import { Flex, Text } from '@chakra-ui/layout'
 
 export const EmptyDataMessage = ({ text }: { text: string }) => {
   return (

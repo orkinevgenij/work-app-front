@@ -1,4 +1,5 @@
 import {
+  useColorModeValue,
   Flex,
   HStack,
   Link,
@@ -6,14 +7,13 @@ import {
   Stack,
   Text,
   UnorderedList,
-} from '@chakra-ui/layout'
+} from '@chakra-ui/react'
+import { FC } from 'react'
 import { NavLink as RouterNavLink } from 'react-router-dom'
 import { countByCompany } from '../helpers/vacancyCounter'
 import { useGetCompanyQuery } from '../store/api/services/company'
 import { useGetAllVacancyQuery } from '../store/api/services/vacancy'
 import { ICompany } from '../types/types'
-import { FC } from 'react'
-import { useColorModeValue } from '@chakra-ui/react'
 
 export const Companies: FC = () => {
   const { data: companies = [] } = useGetCompanyQuery(undefined, {})

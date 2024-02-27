@@ -17,9 +17,9 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
 import { FC, useState } from 'react'
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast'
 import { useRegisterMutation } from '../../store/api/services/user'
 import { auth } from '../../store/features/user/authSlice'

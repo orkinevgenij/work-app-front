@@ -12,7 +12,8 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { useNavigate } from 'react-router-dom'
+import { FC, useEffect } from 'react'
+import { NavLink as RouterNavLink } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast.tsx'
 import { useGetCategoryQuery } from '../../store/api/services/category.ts'
@@ -20,8 +21,6 @@ import { useGetCityQuery } from '../../store/api/services/city.ts'
 import { useGetMyCompanyQuery } from '../../store/api/services/company.ts'
 import { useCreateVacancyMutation } from '../../store/api/services/vacancy.ts'
 import { ICategory, ICity } from '../../types/types.ts'
-import { FC, useEffect } from 'react'
-import { NavLink as RouterNavLink } from 'react-router-dom'
 
 interface IFormValues {
   company?: number

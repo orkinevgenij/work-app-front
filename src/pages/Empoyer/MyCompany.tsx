@@ -1,5 +1,4 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/layout'
-import { Button } from '@chakra-ui/react'
+import { Button, Box, Flex, Heading, Text } from '@chakra-ui/react'
 import { FC } from 'react'
 import { NavLink as RouterNavLink } from 'react-router-dom'
 import { formatDate } from '../../helpers/date.helper'

@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   Flex,
@@ -7,10 +6,10 @@ import {
   FormLabel,
   Heading,
   Input,
+  Link,
   Select,
   Stack,
   Text,
-  Textarea,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
@@ -18,38 +17,29 @@ import { FC, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast'
+import { getFileIcon } from '../../helpers/getFileIcon'
 import { useGetCityQuery } from '../../store/api/services/city'
 import {
   useGetOneResumeQuery,
-  useUpdateResumeMutation,
+  useUpdateResumeWithFileMutation,
 } from '../../store/api/services/resume'
 import { ICity } from '../../types/types'
-interface FileWithSize extends File {
-  size: number
-}
+
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Введіть ім'я"),
   lastname: Yup.string().required('Вкажіть прізвищє'),
   position: Yup.string().required('Вкажіть бажану позицію'),
   city: Yup.string().required('Вкажіть місто'),
-  phone: Yup.string().required('Вкажіть номер телефону'),
-  email: Yup.string()
-    .email('Введіть вірний E-mail')
-    .required("E-mail обов'язковий"),
-  profile: Yup.string().required('Розкажіть про себе'),
-  salary: Yup.number().required('Вкажіть бажану заробітну плату'),
   age: Yup.string().required('Вкажіть дату народження'),
-  file: Yup.mixed().test(
+  file: Yup.mixed().nullable().test(
     'fileSize',
     'Файл дуже великий, максимум 10 МБ',
-    value => {
-      if (value) {
-        const fileWithSize = value as FileWithSize
-        return fileWithSize.size <= 10 * 1024 * 1024
-      }
-      return true
-    },
+   (value) => {
+    if (!value) return true; 
+    const fileWithSize = value as File;
+    return fileWithSize.size <= 10 * 1024 * 1024;
+  }
   ),
 })
 interface IFormValues {
@@ -57,18 +47,14 @@ interface IFormValues {
   lastname: string
   position: string
   city: string
-  phone: string
-  email: string
-  profile: string
-  salary: number
   age: string
   file: File | null
 }
-export const EditResume: FC = () => {
+export const EditResumeWithFile: FC = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const { data: resume } = useGetOneResumeQuery(id, {})
-  const [update, { isLoading }] = useUpdateResumeMutation()
+  const [update, { isLoading }] = useUpdateResumeWithFileMutation()
   const { data: cities = [] } = useGetCityQuery(undefined, {})
 
   const { showToast } = useShowToast()
@@ -79,27 +65,21 @@ export const EditResume: FC = () => {
         lastname: '',
         position: '',
         city: '',
-        phone: '',
-        email: '',
-        profile: '',
-        salary: 0,
         age: '',
-        file: null
+        file:  null,
       },
       validationSchema,
       onSubmit: async (values: IFormValues) => {
         console.log('🚀 ~ onSubmit: ~ values:', values)
         const formData = new FormData()
         formData.append('name', values.name)
-        formData.append('email', values.email)
         formData.append('lastname', values.lastname)
         formData.append('position', values.position)
         formData.append('city', values.city)
-        formData.append('phone', values.phone)
-        formData.append('profile', values.profile)
         formData.append('age', values.age)
-        formData.append('salary', values.salary.toString())
-        if(values.file)  {formData.append('file', values.file)}
+        if (values.file) {
+          formData.append('file', values.file)
+        }
         try {
           const result = await update({ formData, id }).unwrap()
           if (result) {
@@ -150,36 +130,45 @@ export const EditResume: FC = () => {
           Редагувати резюме
         </Heading>
         <Flex direction="column" align="center" textAlign="center">
-          <Avatar
-            src={
-              values?.file
-                ? URL.createObjectURL(values?.file)
-                : resume?.avatar.url
-            }
-            m={5}
-            size="2xl"
-          />
-          <Box mb={3}>
-            {errors.file ? <Text color="red">{errors.file}</Text> : null}
-          </Box>
           <FormControl flexDirection="column">
-            <label htmlFor="avatar">
-              <Button as="span" colorScheme="purple" cursor="pointer" size="sm">
-                Змінити фото
+            <label htmlFor="resume">
+              <Button
+                as="span"
+                colorScheme="purple"
+                cursor="pointer"
+                size="sm"
+                variant="outline"
+              >
+                Завантажити
               </Button>
+              <Flex align="center" gap={1} mt={3}>
+                {values?.file?.name ? (
+                  <Flex align="center" gap={1} mt={3}>
+                    <Text fontWeight="bold"> Нове резюме: </Text>
+                    <Text>{getFileIcon(values.file.type)}</Text>
+                    <Text>{values.file.name}</Text>
+                  </Flex>
+                ) : (
+                  <Link href={resume?.file?.url} fontSize="xl">
+                    Переглянути резюме
+                  </Link>
+                )}
+              </Flex>
             </label>
-
             <Input
-              name="avatar"
+              name="file"
               type="file"
-              id="avatar"
+              id="resume"
               display="none"
               onChange={(event: any) => {
                 setFieldValue('file', event.currentTarget.files[0])
               }}
-              accept="image/*"
+              accept="application/pdf"
             />
           </FormControl>
+            <Box mb={3}>
+            {errors.file ? <Text color="red">{errors.file}</Text> : null}
+          </Box>
         </Flex>
         <FormControl flexDirection="column">
           <FormLabel
@@ -260,26 +249,7 @@ export const EditResume: FC = () => {
         {touched.position && errors.position ? (
           <Text color="red">{errors.position}</Text>
         ) : null}
-        <FormControl flexDirection="column">
-          <FormLabel
-            sx={{
-              fontSize: '1xl',
-              mb: 5,
-            }}
-          >
-            Заробітна плата
-          </FormLabel>
-          <Input
-            type="number"
-            name="salary"
-            value={values.salary === 0 ? '' : values.salary}
-            onChange={handleChange}
-            placeholder="Заробітна плата"
-          />
-        </FormControl>
-        {touched.salary && errors.salary ? (
-          <Text color="red">{errors.salary}</Text>
-        ) : null}
+
         <FormControl flexDirection="column">
           <FormLabel
             sx={{
@@ -298,64 +268,7 @@ export const EditResume: FC = () => {
         {touched.city && errors.city ? (
           <Text color="red">{errors.city}</Text>
         ) : null}
-        <FormControl flexDirection="column">
-          <FormLabel
-            sx={{
-              fontSize: '1xl',
-              mb: 5,
-            }}
-          >
-            Телефон
-          </FormLabel>
-          <Input
-            type="text"
-            name="phone"
-            value={values.phone}
-            onChange={handleChange}
-            placeholder="Телефон"
-          />
-        </FormControl>
-        {touched.phone && errors.phone ? (
-          <Text color="red">{errors.phone}</Text>
-        ) : null}
-        <FormControl flexDirection="column">
-          <FormLabel
-            sx={{
-              fontSize: '1xl',
-              mb: 5,
-            }}
-          >
-            E-mail
-          </FormLabel>
-          <Input
-            name="email"
-            value={values.email}
-            onChange={handleChange}
-            placeholder="E-mail"
-          />
-        </FormControl>
-        {touched.email && errors.email ? (
-          <Text color="red">{errors.email}</Text>
-        ) : null}
-        <FormControl flexDirection="column">
-          <FormLabel
-            sx={{
-              fontSize: '1xl',
-              mb: 5,
-            }}
-          >
-            Про себе
-          </FormLabel>
-          <Textarea
-            name="profile"
-            value={values.profile}
-            onChange={handleChange}
-            placeholder="О себе"
-          />
-        </FormControl>
-        {touched.profile && errors.profile ? (
-          <Text color="red">{errors.profile}</Text>
-        ) : null}
+
         <Button
           isDisabled={isLoading}
           isLoading={isLoading}

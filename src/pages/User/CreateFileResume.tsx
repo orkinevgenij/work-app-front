@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   Flex,
@@ -10,7 +9,6 @@ import {
   Select,
   Stack,
   Text,
-  Textarea,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
@@ -19,8 +17,9 @@ import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast.tsx'
 import { calculateAge, getAgeString } from '../../helpers/date.helper.ts'
-import { useCreateResumeMutation } from '../../store/api/services/resume.ts'
+import { getFileIcon } from '../../helpers/getFileIcon.tsx'
 import { useGetCityQuery } from '../../store/api/services/city.ts'
+import { useCreateResumeMutation } from '../../store/api/services/resume.ts'
 import { ICity } from '../../types/types.ts'
 
 interface ErrorResponse {
@@ -39,12 +38,6 @@ const validationSchema = Yup.object({
   lastname: Yup.string().required('Вкажіть прізвищє'),
   position: Yup.string().required('Вкажіть бажану позицію'),
   city: Yup.string().required('Вкажіть місто'),
-  phone: Yup.string().required('Вкажіть номер телефону'),
-  email: Yup.string()
-    .email('Введіть вірний E-mail')
-    .required("E-mail обов'язковий"),
-  profile: Yup.string().required('Розкажіть про себе'),
-  salary: Yup.number().required('Вкажіть бажану заробітну плату'),
   age: Yup.string().required('Вкажіть дату народження'),
   file: Yup.mixed().test(
     'fileSize',
@@ -63,14 +56,10 @@ interface IFormValues {
   lastname: string
   position: string
   city: string
-  phone: string
-  email: string
-  profile: string
-  salary: number
-  file: ''
   age: string
+  file: File | null
 }
-export const CreateResume: FC = () => {
+export const CreateFileResume: FC = () => {
   const { showToast } = useShowToast()
   const navigate = useNavigate()
   const [createResume, { isLoading }] = useCreateResumeMutation()
@@ -84,24 +73,16 @@ export const CreateResume: FC = () => {
         city: '',
         position: '',
         age: '',
-        file: '',
-        phone: '',
-        email: '',
-        profile: '',
-        salary: 0,
+        file: null,
       },
       validationSchema,
       onSubmit: async (values: IFormValues) => {
         console.log('🚀 ~ onSubmit: ~ values:', values)
         const formData = new FormData()
         formData.append('name', values.name)
-        formData.append('email', values.email)
         formData.append('lastname', values.lastname)
         formData.append('position', values.position)
         formData.append('city', values.city)
-        formData.append('phone', values.phone)
-        formData.append('profile', values.profile)
-        formData.append('salary', values.salary.toString())
         formData.append('age', values.age)
         if (values.file) {
           formData.append('file', values.file)
@@ -142,36 +123,43 @@ export const CreateResume: FC = () => {
           bg={useColorModeValue('white', 'black.600')}
         >
           <Heading size="md" color="purple.400">
-            Створити резюме
+            Резюме у вигляді файлу
           </Heading>
+          <Text align="center">
+            Ми збережемо ваш файл і розмістим на сайті. Ви зможете відгукуватися
+            цим резюме. Ви можете завантажити резюме у форматі pdf.
+          </Text>
           <Flex direction="column" align="center" textAlign="center">
-            <Avatar
-              m={5}
-              size="2xl"
-              src={values.file && URL.createObjectURL(values.file)}
-            />
             <FormControl flexDirection="column">
-              <label htmlFor="avatar">
+              <label htmlFor="resumeFile">
                 <Button
                   as="span"
                   colorScheme="purple"
                   cursor="pointer"
                   size="sm"
+                  variant="outline"
                 >
-                  Выберите фото
+                  Вибрати
                 </Button>
               </label>
               <Input
                 name="file"
                 type="file"
-                id="avatar"
+                id="resumeFile"
                 display="none"
                 onChange={(event: any) => {
                   setFieldValue('file', event.currentTarget.files[0])
                 }}
-                accept="image/*"
+                accept="application/pdf"
               />
             </FormControl>
+            {values.file && (
+              <Flex align="center" gap={1} mt={3}>
+                <Text fontWeight="bold"> Файл резюме: </Text>
+                <Text>{getFileIcon(values.file.type)}</Text>
+                <Text>{values.file.name}</Text>
+              </Flex>
+            )}{' '}
             <Box mb={3}>
               {errors.file ? <Text color="red">{errors.file}</Text> : null}
             </Box>
@@ -263,26 +251,7 @@ export const CreateResume: FC = () => {
           {touched.position && errors.position ? (
             <Text color="red">{errors.position}</Text>
           ) : null}
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              Заробітна плата
-            </FormLabel>
-            <Input
-              type="number"
-              name="salary"
-              value={values.salary === 0 ? '' : values.salary}
-              onChange={handleChange}
-              placeholder="Заробітна плата"
-            />
-          </FormControl>
-          {touched.salary && errors.salary ? (
-            <Text color="red">{errors.salary}</Text>
-          ) : null}
+
           <FormControl flexDirection="column">
             <FormLabel
               sx={{
@@ -300,65 +269,6 @@ export const CreateResume: FC = () => {
           </FormControl>
           {touched.city && errors.city ? (
             <Text color="red">{errors.city}</Text>
-          ) : null}
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              Телефон
-            </FormLabel>
-            <Input
-              type="text"
-              name="phone"
-              value={values.phone}
-              onChange={handleChange}
-              placeholder="Телефон"
-            />
-          </FormControl>
-          {touched.phone && errors.phone ? (
-            <Text color="red">{errors.phone}</Text>
-          ) : null}
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              E-mail
-            </FormLabel>
-            <Input
-              type="email"
-              name="email"
-              value={values.email}
-              onChange={handleChange}
-              placeholder="E-mail"
-            />
-          </FormControl>
-          {touched.email && errors.email ? (
-            <Text color="red">{errors.email}</Text>
-          ) : null}
-          <FormControl flexDirection="column">
-            <FormLabel
-              sx={{
-                fontSize: '1xl',
-                mb: 5,
-              }}
-            >
-              О себе
-            </FormLabel>
-            <Textarea
-              name="profile"
-              value={values.profile}
-              onChange={handleChange}
-              placeholder="О себе"
-            />
-          </FormControl>
-          {touched.profile && errors.profile ? (
-            <Text color="red">{errors.profile}</Text>
           ) : null}
           <Button
             isDisabled={isLoading}

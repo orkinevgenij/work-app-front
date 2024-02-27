@@ -1,4 +1,4 @@
-import { Box, Heading, Text, VStack } from '@chakra-ui/layout'
+import { Box, Text, VStack } from '@chakra-ui/layout'
 import { useColorModeValue } from '@chakra-ui/react'
 import { useLocation } from 'react-router-dom'
 

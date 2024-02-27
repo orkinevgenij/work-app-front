@@ -1,18 +1,21 @@
-import { Box, Heading, Stack, Text } from '@chakra-ui/layout'
 import {
   Button,
   FormControl,
   FormLabel,
   Input,
   useColorModeValue,
+  Box,
+  Heading,
+  Stack,
+  Text,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
+import { FC, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
-import { FC, useEffect } from 'react'
 import { useShowToast } from '../components/hooks/useShowToast'
-import { IUser } from '../types/types'
 import { useUpdateProfileMutation } from '../store/api/services/user'
+import { IUser } from '../types/types'
 const validationSchema = Yup.object({
   name: Yup.string().required("Введіть ім'я"),
   lastname: Yup.string().required('Вкажіть прізвищє'),
@@ -77,7 +80,7 @@ export const EditProfile: FC = () => {
       <Stack
         mt={10}
         spacing={5}
-        width="70%"
+        width={{ base: '100%', md: '80%', xl: '80%' }}
         rounded={'lg'}
         p={5}
         align="center"

@@ -1,12 +1,12 @@
 import { Stack } from '@chakra-ui/layout'
+import { FC } from 'react'
 import { useParams } from 'react-router-dom'
+import { Loader } from '../components/Loader'
 import { VacanciesList } from '../components/VacanciesList'
 import { useGetVacancyByCompanyQuery } from '../store/api/services/vacancy'
-import { useAppSelector } from '../store/hooks'
-import { FC } from 'react'
-import { pagination } from '../store/features/pagination/paginationSlice'
 import { filters } from '../store/features/filter/filterSlice'
-import { Loader } from '../components/Loader'
+import { pagination } from '../store/features/pagination/paginationSlice'
+import { useAppSelector } from '../store/hooks'
 
 export const VacanciesByCompany: FC = () => {
   const { id } = useParams()

@@ -1,12 +1,12 @@
 import { Stack } from '@chakra-ui/layout'
-import { useLocation, useParams } from 'react-router-dom'
-import { useGetVacancyByCityQuery } from '../store/api/services/vacancy'
-import { useAppSelector } from '../store/hooks'
-import { VacanciesList } from '../components/VacanciesList'
 import { FC } from 'react'
-import { pagination } from '../store/features/pagination/paginationSlice'
-import { filters } from '../store/features/filter/filterSlice'
+import { useLocation, useParams } from 'react-router-dom'
 import { Loader } from '../components/Loader'
+import { VacanciesList } from '../components/VacanciesList'
+import { useGetVacancyByCityQuery } from '../store/api/services/vacancy'
+import { filters } from '../store/features/filter/filterSlice'
+import { pagination } from '../store/features/pagination/paginationSlice'
+import { useAppSelector } from '../store/hooks'
 
 export const VacanciesByCity: FC = () => {
   const { state } = useLocation()

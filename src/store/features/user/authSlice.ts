@@ -1,10 +1,10 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { RootState } from '../../store'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import {
   getTokenFromLocalStorage,
   removeTokenLocalStorage,
   setTokenToLocalStorage,
 } from '../../../helpers/localstorage.helper'
+import { RootState } from '../../store'
 
 interface IAuthState {
   accessToken: string | null

@@ -10,15 +10,14 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { useNavigate } from 'react-router-dom'
+import { FC } from 'react'
+import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
+import { useShowToast } from '../../components/hooks/useShowToast'
 import {
   useCreateCompanyMutation,
   useGetMyCompanyQuery,
 } from '../../store/api/services/company'
-import { useShowToast } from '../../components/hooks/useShowToast'
-import { NavLink as RouterNavLink } from 'react-router-dom'
-import { FC } from 'react'
 
 interface IFormValues {
   title: string

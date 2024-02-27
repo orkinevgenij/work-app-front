@@ -4,7 +4,7 @@ import { RootState } from '../store'
 const baseQuery = fetchBaseQuery({
   baseUrl:
     import.meta.env.MODE === 'development'
-      ? 'http://localhost:8000'
+      ? 'http://localhost:8000' 
       : 'https://work-app-2jgg.onrender.com',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState

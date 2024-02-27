@@ -93,6 +93,10 @@ export interface IResume {
   createdAt: string
   updatedAt: string
   age: string
+  avatar: {
+    url: string
+    public_id: string
+  }
   file: {
     url: string
     public_id: string
@@ -109,7 +113,7 @@ export type ResumeArgs = Pick<
   | 'email'
   | 'profile'
   | 'salary'
-  | 'file'
+  | 'avatar'
 >
 export interface Response {
   id: number

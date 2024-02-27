@@ -3,7 +3,6 @@ import { Icon } from '@chakra-ui/react'
 import { FC } from 'react'
 import { BiCategory } from 'react-icons/bi'
 import { FaCity, FaPlus } from 'react-icons/fa'
-
 import { NavLink } from 'react-router-dom'
 
 export const EmployerDashboard: FC = () => {
