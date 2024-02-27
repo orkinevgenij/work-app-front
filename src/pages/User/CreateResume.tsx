@@ -30,9 +30,7 @@ interface ErrorResponse {
   }
   status: number
 }
-interface FileWithSize extends File {
-  size: number
-}
+
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Введіть ім'я"),
@@ -46,17 +44,15 @@ const validationSchema = Yup.object({
   profile: Yup.string().required('Розкажіть про себе'),
   salary: Yup.number().required('Вкажіть бажану заробітну плату'),
   age: Yup.string().required('Вкажіть дату народження'),
-  file: Yup.mixed().test(
-    'fileSize',
-    'Файл дуже великий, максимум 10 МБ',
-    value => {
+  file: Yup.mixed()
+    .required("Аватар обов'язковий")
+    .test('fileSize', 'Файл дуже великий, максимум 10 МБ', value => {
       if (value) {
-        const fileWithSize = value as FileWithSize
+        const fileWithSize = value as File
         return fileWithSize.size <= 10 * 1024 * 1024
       }
       return true
-    },
-  ),
+    }),
 })
 interface IFormValues {
   name: string
@@ -67,8 +63,8 @@ interface IFormValues {
   email: string
   profile: string
   salary: number
-  file: ''
   age: string
+  file: File | ''
 }
 export const CreateResume: FC = () => {
   const { showToast } = useShowToast()
@@ -81,14 +77,14 @@ export const CreateResume: FC = () => {
       initialValues: {
         name: '',
         lastname: '',
-        city: '',
+        city:'', 
         position: '',
         age: '',
-        file: '',
         phone: '',
         email: '',
         profile: '',
         salary: 0,
+        file: '',
       },
       validationSchema,
       onSubmit: async (values: IFormValues) => {
@@ -122,9 +118,9 @@ export const CreateResume: FC = () => {
         }
       },
     })
-  useEffect(()=>{
-    setFieldValue('city', cities[1]?.name)
-  },[cities])
+  useEffect(() => {
+    setFieldValue('city', cities[1]?.name )
+  }, [])
   return (
     <>
       <Box

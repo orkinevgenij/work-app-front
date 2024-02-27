@@ -40,17 +40,15 @@ const validationSchema = Yup.object().shape({
   profile: Yup.string().required('Розкажіть про себе'),
   salary: Yup.number().required('Вкажіть бажану заробітну плату'),
   age: Yup.string().required('Вкажіть дату народження'),
-  file: Yup.mixed().nullable().test(
-    'fileSize',
-    'Файл дуже великий, максимум 10 МБ',
-    value => {
+  file: Yup.mixed()
+    .nullable()
+    .test('fileSize', 'Файл дуже великий, максимум 10 МБ', value => {
       if (value) {
         const fileWithSize = value as FileWithSize
         return fileWithSize.size <= 10 * 1024 * 1024
       }
       return true
-    },
-  ),
+    }),
 })
 interface IFormValues {
   name: string
@@ -84,7 +82,7 @@ export const EditResume: FC = () => {
         profile: '',
         salary: 0,
         age: '',
-        file: null
+        file: null,
       },
       validationSchema,
       onSubmit: async (values: IFormValues) => {
@@ -99,7 +97,9 @@ export const EditResume: FC = () => {
         formData.append('profile', values.profile)
         formData.append('age', values.age)
         formData.append('salary', values.salary.toString())
-        if(values.file)  {formData.append('file', values.file)}
+        if (values.file) {
+          formData.append('file', values.file)
+        }
         try {
           const result = await update({ formData, id }).unwrap()
           if (result) {

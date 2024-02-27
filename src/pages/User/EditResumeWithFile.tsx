@@ -25,22 +25,19 @@ import {
 } from '../../store/api/services/resume'
 import { ICity } from '../../types/types'
 
-
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Введіть ім'я"),
   lastname: Yup.string().required('Вкажіть прізвищє'),
   position: Yup.string().required('Вкажіть бажану позицію'),
   city: Yup.string().required('Вкажіть місто'),
   age: Yup.string().required('Вкажіть дату народження'),
-  file: Yup.mixed().nullable().test(
-    'fileSize',
-    'Файл дуже великий, максимум 10 МБ',
-   (value) => {
-    if (!value) return true; 
-    const fileWithSize = value as File;
-    return fileWithSize.size <= 10 * 1024 * 1024;
-  }
-  ),
+  file: Yup.mixed()
+    .nullable()
+    .test('fileSize', 'Файл дуже великий, максимум 10 МБ', value => {
+      if (!value) return true
+      const fileWithSize = value as File
+      return fileWithSize.size <= 10 * 1024 * 1024
+    }),
 })
 interface IFormValues {
   name: string
@@ -66,7 +63,7 @@ export const EditResumeWithFile: FC = () => {
         position: '',
         city: '',
         age: '',
-        file:  null,
+        file: null,
       },
       validationSchema,
       onSubmit: async (values: IFormValues) => {
@@ -166,7 +163,7 @@ export const EditResumeWithFile: FC = () => {
               accept="application/pdf"
             />
           </FormControl>
-            <Box mb={3}>
+          <Box mb={3}>
             {errors.file ? <Text color="red">{errors.file}</Text> : null}
           </Box>
         </Flex>
