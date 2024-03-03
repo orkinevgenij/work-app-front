@@ -7,7 +7,6 @@ import { FC } from 'react'
 export const RootLayout: FC = () => {
   return (
     <>
-      {/* <Nav /> */}
       <NavBar />
       <Container
         maxW="100vw"

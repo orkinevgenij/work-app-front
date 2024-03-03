@@ -59,7 +59,14 @@ export default function Footer() {
       bg={useColorModeValue('gray.50', 'black.800')}
       color={useColorModeValue('gray.700', 'gray.200')}
     >
-      <Container as={Stack} maxW={'6xl'} py={10}>
+      <Container
+        as={Stack}
+        maxW={'6xl'}
+        py={10}
+        borderTopWidth={1}
+        borderStyle={'solid'}
+        borderColor={useColorModeValue('gray.200', 'gray.700')}
+      >
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8}>
           <Stack align={'flex-start'}>
             <ListHeader>Компанія</ListHeader>

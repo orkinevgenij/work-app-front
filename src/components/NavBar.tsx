@@ -1,6 +1,7 @@
 import { CloseIcon, HamburgerIcon, MoonIcon } from '@chakra-ui/icons'
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   Flex,
@@ -19,10 +20,10 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react'
-import { useSelector } from 'react-redux'
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
 import { checkAuth, logout } from '../store/features/user/authSlice'
-import { useAppDispatch } from '../store/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { useGetCountOfferQuery } from '../store/api/services/offer'
 
 const Links = [
   { label: 'Головна', path: '/' },
@@ -30,12 +31,12 @@ const Links = [
 ]
 
 export default function NavBar() {
+  const dispatch = useAppDispatch()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { colorMode, toggleColorMode } = useColorMode()
   const navigate = useNavigate()
-  const { accessToken, role } = useSelector(checkAuth)
-
-  const dispatch = useAppDispatch()
+  const { accessToken, role } = useAppSelector(checkAuth)
+  const { data: countOffer } = useGetCountOfferQuery(null)
   const logoutHandler = () => {
     dispatch(logout())
     navigate('/')
@@ -158,6 +159,38 @@ export default function NavBar() {
                     </MenuItem>
                   </Link>
                 )}
+                {role === 'user' && (
+                  <Link as={RouterNavLink} to="/offers">
+                    <MenuItem
+                      bg={useColorModeValue('white', 'black.600')}
+                      _hover={{
+                        textDecoration: 'none',
+                        bg: useColorModeValue('gray.100', 'black.500'),
+                      }}
+                    >
+                      <Text>
+                        Пропозиції
+                        <Badge ml="1" colorScheme="green" rounded={'xl'}>
+                          {countOffer}
+                        </Badge>
+                      </Text>
+                    </MenuItem>
+                  </Link>
+                )}
+                {role === 'employer' && (
+                  <Link as={RouterNavLink} to="/offers/company">
+                    <MenuItem
+                      bg={useColorModeValue('white', 'black.600')}
+                      _hover={{
+                        textDecoration: 'none',
+                        bg: useColorModeValue('gray.100', 'black.500'),
+                      }}
+                    >
+                      <Text>Відправлені пропозиції</Text>
+                    </MenuItem>
+                  </Link>
+                )}
+
                 <Link as={RouterNavLink} to={`${role}/dashboard`}>
                   <MenuItem
                     bg={useColorModeValue('white', 'black.600')}
@@ -169,6 +202,7 @@ export default function NavBar() {
                     Управління
                   </MenuItem>
                 </Link>
+
                 <MenuDivider />
                 <MenuItem
                   onClick={logoutHandler}

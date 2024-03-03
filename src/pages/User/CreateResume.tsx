@@ -88,7 +88,6 @@ export const CreateResume: FC = () => {
       },
       validationSchema,
       onSubmit: async (values: IFormValues) => {
-        console.log('🚀 ~ onSubmit: ~ values:', values)
         const formData = new FormData()
         formData.append('name', values.name)
         formData.append('email', values.email)
@@ -172,7 +171,7 @@ export const CreateResume: FC = () => {
               />
             </FormControl>
             <Box mb={3}>
-              {errors.file ? <Text color="red">{errors.file}</Text> : null}
+              {touched.file && errors.file ? <Text color="red">{errors.file}</Text> : null}
             </Box>
           </Flex>
           <FormControl flexDirection="column">

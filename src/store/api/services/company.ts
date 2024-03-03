@@ -11,8 +11,8 @@ export const companyApi = api.injectEndpoints({
       }),
       invalidatesTags: ['Company'],
     }),
-    getMyCompany: builder.query<ICompany, undefined>({
-      query: () => '/api/company/my-companies',
+    getMyCompany: builder.query<ICompany, null>({
+      query: () => '/api/company/my',
       providesTags: ['Company'],
     }),
 

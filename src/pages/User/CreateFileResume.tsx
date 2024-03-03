@@ -12,7 +12,7 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as Yup from 'yup'
 import { useShowToast } from '../../components/hooks/useShowToast.tsx'
@@ -103,6 +103,9 @@ export const CreateFileResume: FC = () => {
         }
       },
     })
+  useEffect(() => {
+    setFieldValue('city', cities[1]?.name )
+  }, [])
   return (
     <Box
       encType="multipart/form-data"
@@ -160,7 +163,7 @@ export const CreateFileResume: FC = () => {
             </Flex>
           )}{' '}
           <Box mb={3}>
-            {errors.file ? <Text color="red">{errors.file}</Text> : null}
+            {touched.file &&  errors.file ? <Text color="red">{errors.file}</Text> : null}
           </Box>
         </Flex>
         <FormControl flexDirection="column">

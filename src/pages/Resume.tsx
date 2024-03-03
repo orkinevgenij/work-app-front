@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Button,
   Flex,
   Heading,
   Icon,
@@ -7,9 +8,11 @@ import {
   Text,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { useState } from 'react'
 import { FiPhone } from 'react-icons/fi'
 import { MdOutlineEmail } from 'react-icons/md'
 import { useParams } from 'react-router-dom'
+import { JobOfferForm } from '../components/JobOfferForm'
 import { PDFViewer } from '../components/PDFViewer'
 import { UserOtherResume } from '../components/UserOtherResume'
 import { formatCurrency } from '../helpers/currency.helper'
@@ -18,9 +21,14 @@ import {
   useGetOneResumeQuery,
   useOtherResumesUserQuery,
 } from '../store/api/services/resume'
+import { useAppSelector } from '../store/hooks'
+import { checkAuth } from '../store/features/user/authSlice'
 
 export const Resume = () => {
   const { id } = useParams()
+  const [isVisible, setIsVisible] = useState<boolean>(false)
+  const { role } = useAppSelector(checkAuth)
+
   const { data: resume } = useGetOneResumeQuery(id, {
     refetchOnMountOrArgChange: true,
   })
@@ -32,6 +40,11 @@ export const Resume = () => {
     <Stack align="center">
       {resume?.avatar && (
         <Avatar bg="purple.500" src={resume?.avatar.url} mt={5} size="2xl" />
+      )}
+      {role === 'employer' && (
+        <Button onClick={() => setIsVisible(true)} mt={5} colorScheme="purple">
+          Запропонувати вакансію
+        </Button>
       )}
       <Stack
         bg={useColorModeValue('white', 'black.600')}
@@ -70,6 +83,7 @@ export const Resume = () => {
             </Text>
           </Flex>
         )}
+        B
       </Stack>
       {resume?.phone && resume?.email && (
         <Stack
@@ -147,6 +161,14 @@ export const Resume = () => {
           </Flex>
         </Stack>
       )}
+      {isVisible && (
+        <JobOfferForm
+          isVisible={isVisible}
+          resume={resume}
+          setIsVisible={setIsVisible}
+        />
+      )}
+
       <Flex direction="column">
         <Text fontSize="2xl" textAlign="center">
           Інші резюме цього кандидата

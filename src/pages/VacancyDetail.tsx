@@ -139,7 +139,13 @@ export const VacancyDetail: FC = () => {
             </Stack>
           </CardBody>
         </Card>
-        {isVisible && <ResponseForm vacancy={vacancy} isVisible={isVisible} />}
+        {isVisible && (
+          <ResponseForm
+            vacancy={vacancy}
+            isVisible={isVisible}
+            setIsVisible={setIsVisible}
+          />
+        )}
       </Flex>
       <Flex direction="column" align="center" p={10}>
         <Heading size="xl" fontWeight="500" mb={5}>

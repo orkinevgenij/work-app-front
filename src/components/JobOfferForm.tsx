@@ -16,42 +16,55 @@ import {
 } from '@chakra-ui/react'
 import { FC, useEffect, useRef, useState } from 'react'
 import { ErrorResponse } from 'react-router-dom'
-import { useCreateResponseMutation } from '../store/api/services/response'
-import { useGetMyResumeQuery } from '../store/api/services/resume'
+import { useGetMyCompanyQuery } from '../store/api/services/company'
+import { useGetVacancyByCompanyQuery } from '../store/api/services/vacancy'
 import { IResume, Vacancy } from '../types/types'
 import { useShowToast } from './hooks/useShowToast'
 import { MdOutlineClose } from 'react-icons/md'
+import { useCreateOfferMutation } from '../store/api/services/offer'
 
 type Props = {
-  vacancy?: Vacancy
+  resume?: IResume
   isVisible: boolean
   setIsVisible: (isVisible: boolean) => void
 }
-export const ResponseForm: FC<Props> = ({
-  vacancy,
+export const JobOfferForm: FC<Props> = ({
+  resume,
   isVisible,
   setIsVisible,
 }) => {
-  const [coverLetter, setCoverLetter] = useState<string>('')
-  const [resumeId, setResumeId] = useState<number>()
+  const [message, setMessage] = useState<string>('')
+  const [vacancyId, setVacancyId] = useState<number>()
+
   const blockRef = useRef<HTMLDivElement>(null)
   const { showToast } = useShowToast()
-  const { data: resumes = [] } = useGetMyResumeQuery(undefined, {
+  const { data: company } = useGetMyCompanyQuery(null, {
     refetchOnMountOrArgChange: true,
   })
-  const [createResponse] = useCreateResponseMutation()
-
+  const { data: vacancies = [] } = useGetVacancyByCompanyQuery(
+    { id: company?.id },
+    {
+      skip: company ? false : true,
+    },
+  )
+  const [create] = useCreateOfferMutation()
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      const result = await createResponse({
-        vacancy: vacancy?.id,
-        resume: resumeId,
-        coverLetter,
+      console.log({
+        vacancy: vacancyId,
+        resume: resume?.id,
+        message,
+      })
+      const result = await create({
+        vacancy: vacancyId,
+        resume: resume?.id,
+        message,
       }).unwrap()
       if (result) {
-        showToast('Відгук відправлений', 'success')
+        showToast('Пропозиція відправлена', 'success')
       }
+      setMessage('')
     } catch (error: unknown) {
       const customError = error as ErrorResponse
       const errorMessage =
@@ -62,10 +75,10 @@ export const ResponseForm: FC<Props> = ({
     }
   }
   useEffect(() => {
-    if (resumes.length > 0) {
-      setResumeId(resumes[0].id)
+    if (vacancies.length > 0) {
+      setVacancyId(vacancies[0].id)
     }
-  }, [resumes])
+  }, [vacancies])
 
   useEffect(() => {
     if (isVisible && blockRef.current) {
@@ -82,9 +95,9 @@ export const ResponseForm: FC<Props> = ({
       >
         <CardHeader>
           <Flex>
-            <Flex flex="1" pr={3} justify="center">
+            <Flex flex="1" gap="4" justify="center" pr={3}>
               <Box>
-                <Heading size="sm">Відгукнутися на вакансію</Heading>
+                <Heading size="sm">Запропонувати вакансію</Heading>
               </Box>
             </Flex>
             <IconButton
@@ -96,28 +109,27 @@ export const ResponseForm: FC<Props> = ({
           </Flex>
         </CardHeader>
         <CardBody>
-          <FormControl mb={5}>
-            <FormLabel>
-              Розкажіть що зацікавило вас в цій вакансії і чому ви підійдете
-            </FormLabel>
+          <FormControl isRequired mb={5}>
+            <FormLabel>Розкажіть про вакансію</FormLabel>
             <Textarea
-              onChange={e => setCoverLetter(e.target.value)}
-              value={coverLetter}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                setMessage(e.target.value)
+              }
+              value={message}
             />
           </FormControl>
 
-          <FormControl>
-            <FormLabel>Резюме</FormLabel>
+          <FormControl isRequired>
+            <FormLabel>Вакансії</FormLabel>
             <Select
               mb={5}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setResumeId(+e.target.value)
+                setVacancyId(+e.target.value)
               }
             >
-              {resumes?.map((resume: IResume) => (
-                <option value={resume.id}>
-                  {resume?.position}
-                  {resume.file && '(Файл)'}
+              {vacancies?.map((vacancy: Vacancy) => (
+                <option key={vacancy.id} value={vacancy.id}>
+                  {vacancy.title}, {vacancy.city.name}, {vacancy.salary}
                 </option>
               ))}
             </Select>

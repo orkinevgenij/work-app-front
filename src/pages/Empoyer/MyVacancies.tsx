@@ -2,7 +2,7 @@ import { Stack } from '@chakra-ui/layout'
 import { FC } from 'react'
 import { VacanciesList } from '../../components/VacanciesList'
 import { useGetMyCompanyQuery } from '../../store/api/services/company'
-import { useGetVacancyByCompanyQuery } from '../../store/api/services/vacancy'
+import { useGetAllVacancyByCompanyPaginateQuery } from '../../store/api/services/vacancy'
 import { filters } from '../../store/features/filter/filterSlice'
 import { useAppSelector } from '../../store/hooks'
 
@@ -12,7 +12,7 @@ export const MyVacancies: FC = () => {
   const { data: company } = useGetMyCompanyQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
-  const { data: vacancies } = useGetVacancyByCompanyQuery(
+  const { data: vacancies } = useGetAllVacancyByCompanyPaginateQuery(
     { id: company?.id, page: currentPage, limit, sort, order },
     {
       refetchOnMountOrArgChange: true,

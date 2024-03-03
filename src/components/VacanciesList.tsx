@@ -144,6 +144,7 @@ export const VacanciesList: FC<Props> = ({ vacancies, city, isLoading }) => {
                 <Flex gap={3} align="center">
                   <Text fontSize="xl" fontWeight="700">
                     {vacancy.company?.title}
+                    {','}
                   </Text>
                   <Text fontSize="xl">{vacancy.city?.name}</Text>
                 </Flex>

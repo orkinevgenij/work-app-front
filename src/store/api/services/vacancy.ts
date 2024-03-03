@@ -46,7 +46,8 @@ export const vacancyApi = api.injectEndpoints({
       query: ({ id, page, limit, sort, order }) =>
         `/api/vacancy/city/${id}?page=${page}&limit=${limit}&sortBy=${sort}:${order}`,
     }),
-    getVacancyByCompany: builder.query<
+
+    getAllVacancyByCompanyPaginate: builder.query<
       IVacancy,
       Record<
         'id' | 'page' | 'limit' | 'sort' | 'order',
@@ -57,6 +58,12 @@ export const vacancyApi = api.injectEndpoints({
         `/api/vacancy/company/${id}?page=${page}&limit=${limit}&sortBy=${sort}:${order}`,
       providesTags: ['Vacancy'],
     }),
+
+    getVacancyByCompany: builder.query<Vacancy[], any>({
+      query: ({ id }) => `/api/vacancy/all/company/${id}`,
+      providesTags: ['Vacancy'],
+    }),
+
     searchVacancy: builder.query<
       IVacancy,
       Record<'title' | 'page' | 'limit', string | number | undefined>
@@ -102,10 +109,11 @@ export const {
   useCreateVacancyMutation,
   useGetVacancyByCategoryQuery,
   useGetVacancyByCityQuery,
-  useGetVacancyByCompanyQuery,
+  useGetAllVacancyByCompanyPaginateQuery,
   useSearchVacancyQuery,
   useAverageSalaryQuery,
   useUpdateVacancyMutation,
   useRemoveVacancyMutation,
   useGetVacancyPaginationQuery,
+  useGetVacancyByCompanyQuery,
 } = vacancyApi

@@ -5,25 +5,37 @@ import {
 } from 'react-router-dom'
 import { RootLayout } from '../layouts/RootLayout'
 import { About } from '../pages/About'
+import { ForgotPassword } from '../pages/Auth/ForgotPassword'
 import { Login } from '../pages/Auth/Login'
 import { Register } from '../pages/Auth/Register'
 import { Categories } from '../pages/Categories'
 import { Cities } from '../pages/Cities'
 import { Companies } from '../pages/Companies'
+import { EditProfile } from '../pages/EditProfile'
+import { CandidateList } from '../pages/Empoyer/CandidateList'
+import { CoverLetter } from '../pages/Empoyer/CoverLetter'
 import { CreateCompany } from '../pages/Empoyer/CreateCompany'
 import { CreateVacancy } from '../pages/Empoyer/CreateVacancy'
 import { EditVacancy } from '../pages/Empoyer/EditVacancy'
 import { EmployerDashboard } from '../pages/Empoyer/EmployerDashboard'
+import { EmpoyerOffers } from '../pages/Empoyer/EmpoyerOffers'
 import { MyCompany } from '../pages/Empoyer/MyCompany'
 import { MyVacancies } from '../pages/Empoyer/MyVacancies'
+import { VacancyResponse } from '../pages/Empoyer/VacancyResponse'
 import { ErrorPage } from '../pages/ErrorPage'
 import { Home } from '../pages/Home'
+import { OfferDetail } from '../pages/OfferDetail'
 import { Profile } from '../pages/Profile'
+import { Resume } from '../pages/Resume'
 import { SearchVacancy } from '../pages/SearchVacancy'
+import { CreateFileResume } from '../pages/User/CreateFileResume'
 import { CreateResume } from '../pages/User/CreateResume'
 import { EditResume } from '../pages/User/EditResume'
+import { EditResumeWithFile } from '../pages/User/EditResumeWithFile'
+import { MyOffers } from '../pages/User/MyOffers'
 import { MyResume } from '../pages/User/MyResume'
 import { MyVacancyResponse } from '../pages/User/MyVacancyResponse'
+import { ResumeList } from '../pages/User/ResumeList'
 import { UserDashboard } from '../pages/User/UserDashboard'
 import { VacanciesByCity } from '../pages/VacanciesByCity'
 import { VacanciesByCompany } from '../pages/VacanciesByCompany'
@@ -31,15 +43,6 @@ import { VacancyByCategory } from '../pages/VacancyByCategory'
 import { VacancyDetail } from '../pages/VacancyDetail'
 import { EmployerPrivateRoute } from './private/EmployerPrivateRoute'
 import { UserPrivateRoute } from './private/UserPrivateRoute'
-import { VacancyResponse } from '../pages/Empoyer/VacancyResponse'
-import { EditProfile } from '../pages/EditProfile'
-import { Resume } from '../pages/Resume'
-import { CoverLetter } from '../pages/Empoyer/CoverLetter'
-import { ForgotPassword } from '../pages/Auth/ForgotPassword'
-import { CandidateList } from '../pages/Empoyer/CandidateList'
-import { ResumeList } from '../pages/User/ResumeList'
-import { CreateFileResume } from '../pages/User/CreateFileResume'
-import { EditResumeWithFile } from '../pages/User/EditResumeWithFile'
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -100,6 +103,10 @@ export const router = createBrowserRouter(
 
       <Route path="resume/:id" element={<Resume />} />
       <Route path="resume/my/:id" element={<MyResume />} />
+
+      <Route path="offers" element={<MyOffers />} />
+      <Route path="offers/company" element={<EmpoyerOffers />} />
+      <Route path="offer/detail/:id" element={<OfferDetail />} />
 
       {/* List city, companies */}
       <Route path="cities" element={<Cities />} />
