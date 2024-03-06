@@ -144,13 +144,14 @@ export const ResponseDetail = () => {
               <Text color="gray" mb={3} whiteSpace="pre-wrap">
                 {response?.message}
               </Text>
-              {response?.user.role === 'user' ? (
+              {response?.user.role === 'user' && response.resume.file ? (
                 <Box mb={3}>
                   <Text>
                     <Link
                       fontWeight="bold"
                       color="purple"
                       href={response?.resume?.file?.url}
+                      download
                     >
                       Резюме
                     </Link>
