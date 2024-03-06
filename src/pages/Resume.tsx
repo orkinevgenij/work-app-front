@@ -23,19 +23,22 @@ import {
 } from '../store/api/services/resume'
 import { useAppSelector } from '../store/hooks'
 import { checkAuth } from '../store/features/user/authSlice'
+import { Loader } from '../components/Loader'
 
 export const Resume = () => {
   const { id } = useParams()
   const [isVisible, setIsVisible] = useState<boolean>(false)
   const { role } = useAppSelector(checkAuth)
 
-  const { data: resume } = useGetOneResumeQuery(id, {
+  const { data: resume, isLoading } = useGetOneResumeQuery(id, {
     refetchOnMountOrArgChange: true,
   })
   const { data: otherResumes = [] } = useOtherResumesUserQuery(id, {
     refetchOnMountOrArgChange: true,
   })
-
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <Stack align="center">
       {resume?.avatar && (
@@ -83,7 +86,6 @@ export const Resume = () => {
             </Text>
           </Flex>
         )}
-        B
       </Stack>
       {resume?.phone && resume?.email && (
         <Stack

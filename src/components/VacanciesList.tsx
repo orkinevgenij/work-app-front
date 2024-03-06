@@ -26,15 +26,15 @@ import { FiEye } from 'react-icons/fi'
 import { NavLink as RouterNavLink, useLocation } from 'react-router-dom'
 import { formatCurrency } from '../helpers/currency.helper'
 import { formatDate } from '../helpers/date.helper'
-import { useMyResponseQuery } from '../store/api/services/response'
+import { useGetUserResponseQuery } from '../store/api/services/response'
 import { useRemoveVacancyMutation } from '../store/api/services/vacancy'
 import { setFilter } from '../store/features/filter/filterSlice'
 import { setTotalPage } from '../store/features/pagination/paginationSlice'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { IVacancy, Response } from '../types/types'
+import { EmptyDataMessage } from './EmptyDataMessage'
 import { Loader } from './Loader'
 import { Pagination } from './Pagination'
-import { EmptyDataMessage } from './EmptyDataMessage'
 
 type Sorting = {
   name: string
@@ -56,7 +56,7 @@ export const VacanciesList: FC<Props> = ({ vacancies, city, isLoading }) => {
   const { pathname } = useLocation()
   const dispatch = useAppDispatch()
   const { totalPages } = useAppSelector(state => state.pagination)
-  const { data: responses = [] } = useMyResponseQuery(undefined, {
+  const { data: responses = [] } = useGetUserResponseQuery(null, {
     refetchOnMountOrArgChange: true,
   })
   const [remove] = useRemoveVacancyMutation()
@@ -141,10 +141,9 @@ export const VacanciesList: FC<Props> = ({ vacancies, city, isLoading }) => {
                 <Text pt="2" fontSize="sm" fontWeight="700">
                   {formatCurrency.format(vacancy?.salary)}
                 </Text>
-                <Flex gap={3} align="center">
-                  <Text fontSize="xl" fontWeight="700">
+                <Flex align="center">
+                  <Text fontSize="xl" fontWeight="700" pr={1}>
                     {vacancy.company?.title}
-                    {','}
                   </Text>
                   <Text fontSize="xl">{vacancy.city?.name}</Text>
                 </Flex>

@@ -31,7 +31,6 @@ export const ForgotPassword: FC = () => {
     },
     validationSchema,
     onSubmit: async values => {
-      console.log('🚀 ~ values:', values)
       try {
         const result = await forgotPassword({ email: values.email }).unwrap()
         if (result) {

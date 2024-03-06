@@ -23,7 +23,6 @@ import {
 import { NavLink as RouterNavLink, useNavigate } from 'react-router-dom'
 import { checkAuth, logout } from '../store/features/user/authSlice'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { useGetCountOfferQuery } from '../store/api/services/offer'
 
 const Links = [
   { label: 'Головна', path: '/' },
@@ -36,7 +35,7 @@ export default function NavBar() {
   const { colorMode, toggleColorMode } = useColorMode()
   const navigate = useNavigate()
   const { accessToken, role } = useAppSelector(checkAuth)
-  const { data: countOffer } = useGetCountOfferQuery(null)
+  // const { data: countOffer } = useGetCountOfferQuery(null)
   const logoutHandler = () => {
     dispatch(logout())
     navigate('/')
@@ -134,7 +133,7 @@ export default function NavBar() {
                     Особисті дані
                   </MenuItem>
                 </Link>
-                {role === 'employer' ? (
+                {/* {role === 'employer' && (
                   <Link as={RouterNavLink} to={'/response'}>
                     <MenuItem
                       bg={useColorModeValue('white', 'black.600')}
@@ -146,21 +145,9 @@ export default function NavBar() {
                       <Text mr={3}>Відгуки на вакансії </Text>
                     </MenuItem>
                   </Link>
-                ) : (
-                  <Link as={RouterNavLink} to={'/response/user'}>
-                    <MenuItem
-                      bg={useColorModeValue('white', 'black.600')}
-                      _hover={{
-                        textDecoration: 'none',
-                        bg: useColorModeValue('gray.100', 'black.500'),
-                      }}
-                    >
-                      <Text mr={3}>Мої відгуки </Text>
-                    </MenuItem>
-                  </Link>
-                )}
+                )} */}
                 {role === 'user' && (
-                  <Link as={RouterNavLink} to="/offers">
+                  <Link as={RouterNavLink} to="/responses/user">
                     <MenuItem
                       bg={useColorModeValue('white', 'black.600')}
                       _hover={{
@@ -169,16 +156,16 @@ export default function NavBar() {
                       }}
                     >
                       <Text>
-                        Пропозиції
+                        Мої пропозиції
                         <Badge ml="1" colorScheme="green" rounded={'xl'}>
-                          {countOffer}
+                          {/* {countOffer} */}
                         </Badge>
                       </Text>
                     </MenuItem>
                   </Link>
                 )}
                 {role === 'employer' && (
-                  <Link as={RouterNavLink} to="/offers/company">
+                  <Link as={RouterNavLink} to="/response/company">
                     <MenuItem
                       bg={useColorModeValue('white', 'black.600')}
                       _hover={{
@@ -186,7 +173,7 @@ export default function NavBar() {
                         bg: useColorModeValue('gray.100', 'black.500'),
                       }}
                     >
-                      <Text>Відправлені пропозиції</Text>
+                      <Text>Пропозиції</Text>
                     </MenuItem>
                   </Link>
                 )}

@@ -1,21 +1,22 @@
 import { IResponse, Response } from '../../../types/types'
 import { api } from '../api'
-enum ResponseStatus {
-  SENT = 'Відправлено',
-  VIEWED = 'Переглянуто',
-  INTERVIEW = 'Співбесіда',
-  REFUSAL = 'Відмова',
-}
+
 export const responseApi = api.injectEndpoints({
   endpoints: builder => ({
-    responseByCompany: builder.query<
-      IResponse,
-      Record<'id' | 'page' | 'limit', number | string | undefined>
-    >({
-      query: ({ id, page, limit }) =>
-        `/api/response/paginate/${id}?page=${page}&limit=${limit}`,
-      providesTags: ['Response'],
-    }),
+    // responseByCompany: builder.query<
+    //   IResponse,
+    //   Record<'id' | 'page' | 'limit', number | string | undefined>
+    // >({
+    //   query: ({ id, page, limit }) =>
+    //     `/api/response/paginate/${id}?page=${page}&limit=${limit}`,
+    //   providesTags: ['Response'],
+    // }),
+    getResponseByCompany: builder.query<Response[], { id: number | undefined }>(
+      {
+        query: ({ id }) => `/api/response/company/${id}`,
+        providesTags: ['Response'],
+      },
+    ),
     myResponseWithPaginate: builder.query<
       IResponse,
       Record<'page' | 'limit', number | string>
@@ -23,12 +24,16 @@ export const responseApi = api.injectEndpoints({
       query: ({ page, limit }) =>
         `/api/response/paginate/my?page=${page}&limit=${limit}`,
     }),
-    myResponse: builder.query<Response[], undefined>({
-      query: () => `/api/response/my`,
+    getUserResponse: builder.query<Response[], null>({
+      query: () => `/api/response/user`,
+    }),
+    getOneResponse: builder.query<Response, string | undefined>({
+      query: id => `/api/response/${id}`,
+      providesTags: ['Response'],
     }),
     createResponse: builder.mutation<
       IResponse,
-      Record<'vacancy' | 'resume' | 'coverLetter', number | string | undefined>
+      Record<'vacancy' | 'resume' | 'message', number | string | undefined>
     >({
       query: data => ({
         url: '/api/response',
@@ -38,7 +43,7 @@ export const responseApi = api.injectEndpoints({
     }),
     changeStatusResponse: builder.mutation<
       IResponse,
-      Record<'id' | 'status', number | ResponseStatus>
+      Record<'id' | 'status', number | string | undefined>
     >({
       query: ({ id, status }) => ({
         url: '/api/response/response-status',
@@ -50,9 +55,10 @@ export const responseApi = api.injectEndpoints({
   }),
 })
 export const {
-  useResponseByCompanyQuery,
+  useGetResponseByCompanyQuery,
   useCreateResponseMutation,
-  useMyResponseQuery,
+  useGetUserResponseQuery,
+  useGetOneResponseQuery,
   useMyResponseWithPaginateQuery,
   useChangeStatusResponseMutation,
 } = responseApi

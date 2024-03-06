@@ -25,7 +25,6 @@ export const api = createApi({
     'Resume',
     'User',
     'Response',
-    'Offer',
     'Chat',
   ],
 })

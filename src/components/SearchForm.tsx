@@ -23,7 +23,6 @@ export const SearchForm: FC<Props> = ({ vacancies }) => {
   const search = useAppSelector(searchValue)
   return (
     <Stack as="form">
-      
       <FormControl
         bg={useColorModeValue('purple.400', 'black.700')}
         display="flex"
@@ -32,28 +31,16 @@ export const SearchForm: FC<Props> = ({ vacancies }) => {
         p={5}
         mb={5}
       >
-            <Box ml={3} bg='red' w='200px'>
-      Інфо для входу:
-      <Text>
-        Работодавець:
-      </Text>
-     <Text>
-       login:admin
-     </Text>
-      <Text>
-        password:12345678
-      </Text>
-      <br />
-          <Text>
-        Шукач:
-      </Text>
-     <Text>
-       login:user
-     </Text>
-      <Text>
-        password:12345678
-      </Text>
-    </Box>
+        <Box ml={3} bg="red" w="200px">
+          Інфо для входу:
+          <Text>Работодавець:</Text>
+          <Text>login:admin</Text>
+          <Text>password:12345678</Text>
+          <br />
+          <Text>Шукач:</Text>
+          <Text>login:user</Text>
+          <Text>password:12345678</Text>
+        </Box>
         <FormLabel
           sx={{
             fontSize: '3xl',

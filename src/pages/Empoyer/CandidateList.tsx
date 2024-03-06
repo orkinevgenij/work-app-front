@@ -9,13 +9,15 @@ import {
 } from '../../helpers/date.helper'
 import { useGetAllResumeQuery } from '../../store/api/services/resume'
 import { IResume } from '../../types/types'
+import { Loader } from '../../components/Loader'
 
 export const CandidateList = () => {
-  const { data: candidates } = useGetAllResumeQuery(undefined, {
+  const { data: candidates, isLoading } = useGetAllResumeQuery(undefined, {
     refetchOnMountOrArgChange: true,
   })
-  console.log('🚀 ~ CandidateList ~ candidates:', candidates)
-
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <Stack w="90vw" margin="0 auto">
       {candidates?.map((candidate: IResume) => (

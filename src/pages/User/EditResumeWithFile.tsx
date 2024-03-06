@@ -67,7 +67,6 @@ export const EditResumeWithFile: FC = () => {
       },
       validationSchema,
       onSubmit: async (values: IFormValues) => {
-        console.log('🚀 ~ onSubmit: ~ values:', values)
         const formData = new FormData()
         formData.append('name', values.name)
         formData.append('lastname', values.lastname)
@@ -157,8 +156,11 @@ export const EditResumeWithFile: FC = () => {
               type="file"
               id="resume"
               display="none"
-              onChange={(event: any) => {
-                setFieldValue('file', event.currentTarget.files[0])
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const files = event.currentTarget.files
+                if (files && files.length > 0) {
+                  setFieldValue('file', files[0])
+                }
               }}
               accept="application/pdf"
             />

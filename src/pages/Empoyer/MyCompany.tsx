@@ -5,10 +5,9 @@ import { formatDate } from '../../helpers/date.helper'
 import { useGetMyCompanyQuery } from '../../store/api/services/company'
 
 export const MyCompany: FC = () => {
-  const { data: company } = useGetMyCompanyQuery(undefined, {
+  const { data: company } = useGetMyCompanyQuery(null, {
     refetchOnMountOrArgChange: true,
   })
-  console.log(company)
   return (
     <Flex align="center" direction="column">
       {company ? (

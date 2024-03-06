@@ -18,23 +18,21 @@ import { CreateCompany } from '../pages/Empoyer/CreateCompany'
 import { CreateVacancy } from '../pages/Empoyer/CreateVacancy'
 import { EditVacancy } from '../pages/Empoyer/EditVacancy'
 import { EmployerDashboard } from '../pages/Empoyer/EmployerDashboard'
-import { EmpoyerOffers } from '../pages/Empoyer/EmpoyerOffers'
+import { EmpoyerResponse } from '../pages/Empoyer/EmpoyerResponse'
 import { MyCompany } from '../pages/Empoyer/MyCompany'
 import { MyVacancies } from '../pages/Empoyer/MyVacancies'
-import { VacancyResponse } from '../pages/Empoyer/VacancyResponse'
 import { ErrorPage } from '../pages/ErrorPage'
 import { Home } from '../pages/Home'
-import { OfferDetail } from '../pages/OfferDetail'
 import { Profile } from '../pages/Profile'
+import { ResponseDetail } from '../pages/ResponseDetail'
 import { Resume } from '../pages/Resume'
 import { SearchVacancy } from '../pages/SearchVacancy'
 import { CreateFileResume } from '../pages/User/CreateFileResume'
 import { CreateResume } from '../pages/User/CreateResume'
 import { EditResume } from '../pages/User/EditResume'
 import { EditResumeWithFile } from '../pages/User/EditResumeWithFile'
-import { MyOffers } from '../pages/User/MyOffers'
+import { MyResponses } from '../pages/User/MyResponses'
 import { MyResume } from '../pages/User/MyResume'
-import { MyVacancyResponse } from '../pages/User/MyVacancyResponse'
 import { ResumeList } from '../pages/User/ResumeList'
 import { UserDashboard } from '../pages/User/UserDashboard'
 import { VacanciesByCity } from '../pages/VacanciesByCity'
@@ -80,14 +78,6 @@ export const router = createBrowserRouter(
       <Route path="" element={<EmployerPrivateRoute />}>
         <Route path="vacancies/my" element={<MyVacancies />} />
       </Route>
-      {/* Response vacancy */}
-      <Route path="" element={<EmployerPrivateRoute />}>
-        <Route path="response" element={<VacancyResponse />} />
-      </Route>
-      <Route path="" element={<UserPrivateRoute />}>
-        <Route path="response/user" element={<MyVacancyResponse />} />
-      </Route>
-      <Route path="cover-letter" element={<CoverLetter />} />
 
       {/* Resume */}
       <Route path="" element={<UserPrivateRoute />}>
@@ -100,13 +90,16 @@ export const router = createBrowserRouter(
         <Route path="resume/edit/file/:id" element={<EditResumeWithFile />} />
         <Route path="resume/resume-list" element={<ResumeList />} />
       </Route>
-
       <Route path="resume/:id" element={<Resume />} />
       <Route path="resume/my/:id" element={<MyResume />} />
 
-      <Route path="offers" element={<MyOffers />} />
-      <Route path="offers/company" element={<EmpoyerOffers />} />
-      <Route path="offer/detail/:id" element={<OfferDetail />} />
+      {/* ------------------------------Responses----------- */}
+      <Route path="" element={<EmployerPrivateRoute />}></Route>
+      <Route path="" element={<UserPrivateRoute />}></Route>
+      <Route path="responses/user" element={<MyResponses />} />
+      <Route path="response/company" element={<EmpoyerResponse />} />
+      <Route path="cover-letter" element={<CoverLetter />} />
+      <Route path="response/detail/:id" element={<ResponseDetail />} />
 
       {/* List city, companies */}
       <Route path="cities" element={<Cities />} />

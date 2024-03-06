@@ -15,10 +15,13 @@ import { formatCurrency } from '../../helpers/currency.helper'
 import { formatDate } from '../../helpers/date.helper'
 import { useGetMyResumeQuery } from '../../store/api/services/resume'
 import { IResume } from '../../types/types'
+import { Loader } from '../../components/Loader'
 
 export const ResumeList = () => {
-  const { data: resumes = [] } = useGetMyResumeQuery(undefined, {})
-
+  const { data: resumes = [], isLoading } = useGetMyResumeQuery(undefined, {})
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <Stack w="80vw" margin="0 auto">
       {resumes.length ? (

@@ -1,13 +1,14 @@
+import { Message, MessageArgs } from '../../../types/types'
 import { api } from '../api'
 
 export const chatApi = api.injectEndpoints({
   endpoints: builder => ({
-    getOfferMessages: builder.query<any, string | undefined>({
+    getMessages: builder.query<Message[], string | undefined>({
       query: id => `/api/chat/messages/${id}`,
       providesTags: ['Chat'],
     }),
 
-    createMessage: builder.mutation<any, any>({
+    createMessage: builder.mutation<Message, MessageArgs>({
       query: data => ({
         url: '/api/chat',
         method: 'POST',
@@ -17,4 +18,4 @@ export const chatApi = api.injectEndpoints({
     }),
   }),
 })
-export const { useGetOfferMessagesQuery, useCreateMessageMutation } = chatApi
+export const { useGetMessagesQuery, useCreateMessageMutation } = chatApi

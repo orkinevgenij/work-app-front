@@ -10,17 +10,16 @@ import {
   Heading,
   IconButton,
   Select,
-  Text,
   Textarea,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { FC, useEffect, useRef, useState } from 'react'
+import { MdOutlineClose } from 'react-icons/md'
 import { ErrorResponse } from 'react-router-dom'
 import { useCreateResponseMutation } from '../store/api/services/response'
 import { useGetMyResumeQuery } from '../store/api/services/resume'
 import { IResume, Vacancy } from '../types/types'
 import { useShowToast } from './hooks/useShowToast'
-import { MdOutlineClose } from 'react-icons/md'
 
 type Props = {
   vacancy?: Vacancy
@@ -32,7 +31,7 @@ export const ResponseForm: FC<Props> = ({
   isVisible,
   setIsVisible,
 }) => {
-  const [coverLetter, setCoverLetter] = useState<string>('')
+  const [message, setMessage] = useState<string>('')
   const [resumeId, setResumeId] = useState<number>()
   const blockRef = useRef<HTMLDivElement>(null)
   const { showToast } = useShowToast()
@@ -47,7 +46,7 @@ export const ResponseForm: FC<Props> = ({
       const result = await createResponse({
         vacancy: vacancy?.id,
         resume: resumeId,
-        coverLetter,
+        message,
       }).unwrap()
       if (result) {
         showToast('Відгук відправлений', 'success')
@@ -101,8 +100,8 @@ export const ResponseForm: FC<Props> = ({
               Розкажіть що зацікавило вас в цій вакансії і чому ви підійдете
             </FormLabel>
             <Textarea
-              onChange={e => setCoverLetter(e.target.value)}
-              value={coverLetter}
+              onChange={e => setMessage(e.target.value)}
+              value={message}
             />
           </FormControl>
 

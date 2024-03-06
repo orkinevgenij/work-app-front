@@ -34,9 +34,13 @@ import {
   useGetOneVacancyQuery,
   useGetSimilarVacancyQuery,
 } from '../store/api/services/vacancy'
+import { useAppSelector } from '../store/hooks'
+import { checkAuth } from '../store/features/user/authSlice'
 
 export const VacancyDetail: FC = () => {
   const { id } = useParams()
+  const { role } = useAppSelector(checkAuth)
+
   const [isVisible, setIsVisible] = useState<boolean>(false)
 
   const { data: vacancy, isLoading } = useGetOneVacancyQuery(id, {})
@@ -72,17 +76,19 @@ export const VacancyDetail: FC = () => {
               to="/"
               color="purple.500"
             />
-            <Button
-              ml={5}
-              onClick={() => setIsVisible(true)}
-              bg="purple.400"
-              color="white"
-              _hover={{
-                bg: 'purple.500',
-              }}
-            >
-              Відгукнутися
-            </Button>
+            {role === 'user' && (
+              <Button
+                ml={5}
+                onClick={() => setIsVisible(true)}
+                bg="purple.400"
+                color="white"
+                _hover={{
+                  bg: 'purple.500',
+                }}
+              >
+                Відгукнутися
+              </Button>
+            )}
 
             <Menu>
               <MenuButton as={Button} ml="auto" rightIcon={<ChevronDownIcon />}>

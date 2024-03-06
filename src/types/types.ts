@@ -124,7 +124,20 @@ export interface Response {
   vacancy: Vacancy
   company: ICompany
   user: IUser
-  coverLetter: string
+  message: string
+}
+export interface Message {
+  createdAt: string
+  id: number
+  status: string
+  message: string
+  responseId: number
+  updatedAt: string
+  user: IUser
+}
+export interface MessageArgs {
+  responseId?: number
+  message: string
 }
 export interface IResponse {
   data: Response[]

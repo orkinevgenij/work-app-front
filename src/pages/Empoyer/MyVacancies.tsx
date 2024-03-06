@@ -9,7 +9,7 @@ import { useAppSelector } from '../../store/hooks'
 export const MyVacancies: FC = () => {
   const { limit, currentPage } = useAppSelector(state => state.pagination)
   const { sort, order } = useAppSelector(filters)
-  const { data: company } = useGetMyCompanyQuery(undefined, {
+  const { data: company } = useGetMyCompanyQuery(null, {
     refetchOnMountOrArgChange: true,
   })
   const { data: vacancies } = useGetAllVacancyByCompanyPaginateQuery(

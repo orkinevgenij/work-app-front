@@ -10,18 +10,17 @@ import {
   Heading,
   IconButton,
   Select,
-  Text,
   Textarea,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { FC, useEffect, useRef, useState } from 'react'
+import { MdOutlineClose } from 'react-icons/md'
 import { ErrorResponse } from 'react-router-dom'
 import { useGetMyCompanyQuery } from '../store/api/services/company'
+import { useCreateResponseMutation } from '../store/api/services/response'
 import { useGetVacancyByCompanyQuery } from '../store/api/services/vacancy'
 import { IResume, Vacancy } from '../types/types'
 import { useShowToast } from './hooks/useShowToast'
-import { MdOutlineClose } from 'react-icons/md'
-import { useCreateOfferMutation } from '../store/api/services/offer'
 
 type Props = {
   resume?: IResume
@@ -35,7 +34,6 @@ export const JobOfferForm: FC<Props> = ({
 }) => {
   const [message, setMessage] = useState<string>('')
   const [vacancyId, setVacancyId] = useState<number>()
-
   const blockRef = useRef<HTMLDivElement>(null)
   const { showToast } = useShowToast()
   const { data: company } = useGetMyCompanyQuery(null, {
@@ -47,24 +45,18 @@ export const JobOfferForm: FC<Props> = ({
       skip: company ? false : true,
     },
   )
-  const [create] = useCreateOfferMutation()
+  const [createResponse] = useCreateResponseMutation()
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      console.log({
-        vacancy: vacancyId,
-        resume: resume?.id,
-        message,
-      })
-      const result = await create({
+      const result = await createResponse({
         vacancy: vacancyId,
         resume: resume?.id,
         message,
       }).unwrap()
       if (result) {
-        showToast('Пропозиція відправлена', 'success')
+        showToast('Відгук відправлений', 'success')
       }
-      setMessage('')
     } catch (error: unknown) {
       const customError = error as ErrorResponse
       const errorMessage =

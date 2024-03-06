@@ -38,10 +38,9 @@ const validationSchema = Yup.object({
   city: Yup.number().required('Оберіть місто'),
 })
 export const CreateVacancy: FC = () => {
-  const { data: company } = useGetMyCompanyQuery(undefined, {
+  const { data: company } = useGetMyCompanyQuery(null, {
     refetchOnMountOrArgChange: true,
   })
-  console.log(company)
   const { data: categories = [] } = useGetCategoryQuery(undefined, {})
   const { data: cities = [] } = useGetCityQuery(undefined, {})
   const [createVacancy, { isLoading }] = useCreateVacancyMutation()
@@ -88,9 +87,9 @@ export const CreateVacancy: FC = () => {
             spacing={5}
             width="70%"
             rounded={'lg'}
+            boxShadow={'lg'}
             p={5}
             align="center"
-            boxShadow={'lg'}
             bg={useColorModeValue('white', 'black.600')}
           >
             <FormControl flexDirection="column">

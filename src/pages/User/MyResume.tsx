@@ -30,12 +30,13 @@ import {
   useGetOneResumeQuery,
   useRemoveResumeMutation,
 } from '../../store/api/services/resume'
+import { Loader } from '../../components/Loader'
 
 export const MyResume: FC = () => {
   const navigate = useNavigate()
   const { id } = useParams()
   const { showToast } = useShowToast()
-  const { data: resume } = useGetOneResumeQuery(id, {
+  const { data: resume, isLoading } = useGetOneResumeQuery(id, {
     refetchOnMountOrArgChange: true,
   })
   const [remove] = useRemoveResumeMutation()
@@ -51,7 +52,9 @@ export const MyResume: FC = () => {
       console.log(error)
     }
   }
-
+  if (isLoading) {
+    return <Loader />
+  }
   return (
     <Stack align="center">
       <Stack
@@ -62,10 +65,10 @@ export const MyResume: FC = () => {
         {resume?.avatar && (
           <Flex justify="center">
             <Avatar
-                bg="purple.500"
+              bg="purple.500"
               src={resume?.avatar?.url}
               mt={5}
-              size="2xl"    
+              size="2xl"
             />
           </Flex>
         )}

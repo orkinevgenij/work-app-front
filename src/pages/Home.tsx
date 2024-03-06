@@ -42,7 +42,6 @@ export const Home: FC = () => {
 
   return (
     <>
-
       <SearchForm vacancies={vacancies} />
       <SimpleGrid columns={[1, 3]} spacing={3}>
         <Flex

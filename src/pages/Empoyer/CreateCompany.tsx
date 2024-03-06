@@ -30,7 +30,6 @@ const validationSchema = Yup.object({
 export const CreateCompany: FC = () => {
   const navigate = useNavigate()
   const { data: company } = useGetMyCompanyQuery(undefined, {})
-  console.log('🚀 ~ company:', company)
   const [create, { isLoading }] = useCreateCompanyMutation()
   const { showToast } = useShowToast()
 
