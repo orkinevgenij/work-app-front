@@ -150,7 +150,7 @@ export const ResponseDetail = () => {
                     <Link
                       fontWeight="bold"
                       color="purple"
-                      href={response?.resume.file.url}
+                      href={response?.resume?.file?.url}
                     >
                       Резюме
                     </Link>
@@ -199,7 +199,7 @@ export const ResponseDetail = () => {
                   onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
                     setMessage(e.target.value)
                   }
-                  height="200px"
+                  h="600px"
                   mb={5}
                 />
               </FormControl>

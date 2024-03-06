@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { FC, useEffect, useRef, useState } from 'react'
 import { MdOutlineClose } from 'react-icons/md'
-import { ErrorResponse } from 'react-router-dom'
+import { ErrorResponse, useNavigate } from 'react-router-dom'
 import { useCreateResponseMutation } from '../store/api/services/response'
 import { useGetMyResumeQuery } from '../store/api/services/resume'
 import { IResume, Vacancy } from '../types/types'
@@ -31,6 +31,7 @@ export const ResponseForm: FC<Props> = ({
   isVisible,
   setIsVisible,
 }) => {
+  const navigate = useNavigate()
   const [message, setMessage] = useState<string>('')
   const [resumeId, setResumeId] = useState<number>()
   const blockRef = useRef<HTMLDivElement>(null)
@@ -50,6 +51,7 @@ export const ResponseForm: FC<Props> = ({
       }).unwrap()
       if (result) {
         showToast('Відгук відправлений', 'success')
+        navigate('/')
       }
     } catch (error: unknown) {
       const customError = error as ErrorResponse
@@ -72,7 +74,16 @@ export const ResponseForm: FC<Props> = ({
     }
   }, [isVisible])
   return (
-    <Box as="form" w="70%" onSubmit={onSubmit}>
+    <Box
+      w={{
+        base: '100%',
+        sm: '90%',
+        md: '80%',
+        xl: '70%',
+      }}
+      as="form"
+      onSubmit={onSubmit}
+    >
       <Card
         ref={blockRef}
         mt={5}
@@ -102,6 +113,7 @@ export const ResponseForm: FC<Props> = ({
             <Textarea
               onChange={e => setMessage(e.target.value)}
               value={message}
+              h="300px"
             />
           </FormControl>
 

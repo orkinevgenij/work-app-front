@@ -34,11 +34,11 @@ export const SearchForm: FC<Props> = ({ vacancies }) => {
         <Box ml={3} bg="red" w="200px">
           Інфо для входу:
           <Text>Работодавець:</Text>
-          <Text>login:admin</Text>
+          <Text>login:admin@gmail.com</Text>
           <Text>password:12345678</Text>
           <br />
           <Text>Шукач:</Text>
-          <Text>login:user</Text>
+          <Text>login:user@gmail.com</Text>
           <Text>password:12345678</Text>
         </Box>
         <FormLabel

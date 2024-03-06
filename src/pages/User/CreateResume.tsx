@@ -31,7 +31,6 @@ interface ErrorResponse {
   status: number
 }
 
-
 const validationSchema = Yup.object({
   name: Yup.string().required("Введіть ім'я"),
   lastname: Yup.string().required('Вкажіть прізвищє'),
@@ -77,7 +76,7 @@ export const CreateResume: FC = () => {
       initialValues: {
         name: '',
         lastname: '',
-        city:'', 
+        city: '',
         position: '',
         age: '',
         phone: '',
@@ -118,8 +117,10 @@ export const CreateResume: FC = () => {
       },
     })
   useEffect(() => {
-    setFieldValue('city', cities[1]?.name )
-  }, [])
+    if (cities.length > 0) {
+      setFieldValue('city', cities[0]?.name)
+    }
+  }, [cities])
   return (
     <>
       <Box
@@ -171,7 +172,9 @@ export const CreateResume: FC = () => {
               />
             </FormControl>
             <Box mb={3}>
-              {touched.file && errors.file ? <Text color="red">{errors.file}</Text> : null}
+              {touched.file && errors.file ? (
+                <Text color="red">{errors.file}</Text>
+              ) : null}
             </Box>
           </Flex>
           <FormControl flexDirection="column">

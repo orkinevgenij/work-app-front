@@ -51,7 +51,7 @@ export const EditProfile: FC = () => {
         try {
           const result = await update(values).unwrap()
           if (result) {
-            showToast('Резюме оновлено', 'success')
+            showToast('Профіль оновлено', 'success')
             navigate('/auth/profile')
           }
         } catch (error) {

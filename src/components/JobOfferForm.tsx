@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { FC, useEffect, useRef, useState } from 'react'
 import { MdOutlineClose } from 'react-icons/md'
-import { ErrorResponse } from 'react-router-dom'
+import { ErrorResponse, useNavigate } from 'react-router-dom'
 import { useGetMyCompanyQuery } from '../store/api/services/company'
 import { useCreateResponseMutation } from '../store/api/services/response'
 import { useGetVacancyByCompanyQuery } from '../store/api/services/vacancy'
@@ -32,6 +32,7 @@ export const JobOfferForm: FC<Props> = ({
   isVisible,
   setIsVisible,
 }) => {
+  const navigate = useNavigate()
   const [message, setMessage] = useState<string>('')
   const [vacancyId, setVacancyId] = useState<number>()
   const blockRef = useRef<HTMLDivElement>(null)
@@ -78,7 +79,16 @@ export const JobOfferForm: FC<Props> = ({
     }
   }, [isVisible])
   return (
-    <Box as="form" w="70%" onSubmit={onSubmit}>
+    <Box
+      as="form"
+      w={{
+        base: '100%',
+        sm: '90%',
+        md: '80%',
+        xl: '70%',
+      }}
+      onSubmit={onSubmit}
+    >
       <Card
         ref={blockRef}
         mt={5}
