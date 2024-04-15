@@ -39,7 +39,6 @@ export const Home: FC = () => {
     },
   )
   const { data: averageSalary } = useAverageSalaryQuery(undefined, {})
-  console.log('Hello world')
   return (
     <>
       <SearchForm vacancies={vacancies} />
