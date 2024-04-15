@@ -32,7 +32,6 @@ export const JobOfferForm: FC<Props> = ({
   isVisible,
   setIsVisible,
 }) => {
-  const navigate = useNavigate()
   const [message, setMessage] = useState<string>('')
   const [vacancyId, setVacancyId] = useState<number>()
   const blockRef = useRef<HTMLDivElement>(null)

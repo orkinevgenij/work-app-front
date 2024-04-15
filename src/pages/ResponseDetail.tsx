@@ -90,7 +90,7 @@ export const ResponseDetail = () => {
               <Text>
                 <Link
                   fontWeight="bold"
-                  color="purple"
+                  color={useColorModeValue('purple', 'white')}
                   as={RouterNavLink}
                   to={`/vacancy/${response?.vacancy?.id}`}
                 >
@@ -106,7 +106,7 @@ export const ResponseDetail = () => {
               <Text>
                 <Link
                   fontWeight="bold"
-                  color="purple"
+                  color={useColorModeValue('purple', 'white')}
                   as={RouterNavLink}
                   to={`/resume/${response?.resume?.id}`}
                 >

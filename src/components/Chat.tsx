@@ -29,7 +29,6 @@ export const Chat: FC<Props> = ({ messages }) => {
           >
             {message.message}
           </Text>
-
           <Divider />
         </Stack>
       ))}
