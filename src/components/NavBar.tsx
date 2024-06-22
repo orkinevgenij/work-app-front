@@ -133,19 +133,6 @@ export default function NavBar() {
                     Особисті дані
                   </MenuItem>
                 </Link>
-                {/* {role === 'employer' && (
-                  <Link as={RouterNavLink} to={'/response'}>
-                    <MenuItem
-                      bg={useColorModeValue('white', 'black.600')}
-                      _hover={{
-                        textDecoration: 'none',
-                        bg: useColorModeValue('gray.100', 'black.500'),
-                      }}
-                    >
-                      <Text mr={3}>Відгуки на вакансії </Text>
-                    </MenuItem>
-                  </Link>
-                )} */}
                 {role === 'user' && (
                   <Link as={RouterNavLink} to="/responses/user">
                     <MenuItem

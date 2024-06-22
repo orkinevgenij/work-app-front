@@ -131,7 +131,7 @@ export const VacancyDetail: FC = () => {
               <HStack>
                 <Icon color="gray.400" boxSize={5} as={MdCorporateFare} />
                 <Text fontSize="xl" fontWeight="bold" color="purple.500">
-                  {vacancy?.company.title}
+                  {vacancy?.company?.title}
                 </Text>
               </HStack>
               <HStack>

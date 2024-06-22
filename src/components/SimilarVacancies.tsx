@@ -26,7 +26,7 @@ export const SimilarVacancies: FC<Props> = ({ similarVacancies }) => {
             </Text>
           </Flex>
           <Flex gap={3}>
-            <Text fontWeight="700">{vacancy?.company.title}</Text>
+            <Text fontWeight="700">{vacancy?.company?.title}</Text>
             <Text>{vacancy?.city?.name}</Text>
           </Flex>
         </Box>
